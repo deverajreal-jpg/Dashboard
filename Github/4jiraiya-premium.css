@@ -1,0 +1,726 @@
+/* ============================================================
+   4JIRAIYA · PREMIUM POLISH
+   Cinematic gaming — embossed gold, parchment-friendly,
+   light/dark mode aware. Layers ON TOP of brand.css.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&display=swap');
+
+/* ── THEME TOKENS ─────────────────────────────────────────── */
+:root, [data-jr-theme="dark"]{
+  /* surfaces */
+  --jr-bg: #0a0805;
+  --jr-bg-2: #100c08;
+  --jr-surface: #15110b;
+  --jr-surface-2: #1d1812;
+  --jr-surface-3: #251f17;
+  --jr-border: rgba(200,151,42,.18);
+  --jr-border-strong: rgba(200,151,42,.35);
+  --jr-divider: rgba(200,151,42,.12);
+  --jr-text: #ece4d3;
+  --jr-text-2: #b4ad9e;
+  --jr-text-3: #75705f;
+  --jr-muted: #4a463c;
+
+  /* gold scale */
+  --jr-gold-50: #fff4cc;
+  --jr-gold-100: #f6dc8a;
+  --jr-gold-200: #f0b93a;
+  --jr-gold-300: #d6a02d;
+  --jr-gold-400: #c8972a;
+  --jr-gold-500: #a07520;
+  --jr-gold-600: #6b4d12;
+  --jr-gold-shine: linear-gradient(180deg, #fff0b8 0%, #f0b93a 30%, #c8972a 70%, #6b4d12 100%);
+  --jr-gold-shine-sub: linear-gradient(180deg, #f0b93a 0%, #c8972a 50%, #8a6620 100%);
+
+  /* state colors */
+  --jr-green: #5fc485;
+  --jr-red:   #d6534a;
+  --jr-blue:  #6ea8d4;
+  --jr-purple:#9b6bd8;
+
+  /* effects */
+  --jr-emboss-top: rgba(255, 220, 140, 0.10);
+  --jr-emboss-bot: rgba(0, 0, 0, 0.55);
+  --jr-card-bg: linear-gradient(180deg, #1a140d 0%, #110d08 100%);
+  --jr-card-bg-hover: linear-gradient(180deg, #20180e 0%, #15100a 100%);
+  --jr-card-shadow: 0 6px 18px rgba(0,0,0,.45), 0 1px 0 rgba(255,220,140,.05) inset, 0 -1px 0 rgba(0,0,0,.6) inset;
+  --jr-card-shadow-hover: 0 10px 26px rgba(0,0,0,.55), 0 0 0 1px rgba(200,151,42,.35), 0 1px 0 rgba(255,220,140,.08) inset;
+  --jr-paper-grain-opacity: 0.025;
+  --jr-page-overlay: radial-gradient(ellipse at top, rgba(200,151,42,.05) 0%, transparent 60%);
+}
+
+/* ── PARCHMENT / LIGHT THEME ──────────────────────────────── */
+[data-jr-theme="light"]{
+  --jr-bg: #f4ecd8;
+  --jr-bg-2: #efe5cd;
+  --jr-surface: #f9f1de;
+  --jr-surface-2: #f1e7ce;
+  --jr-surface-3: #e8dcbc;
+  --jr-border: rgba(108, 78, 26, 0.22);
+  --jr-border-strong: rgba(108, 78, 26, 0.45);
+  --jr-divider: rgba(108, 78, 26, 0.14);
+  --jr-text: #3a2914;
+  --jr-text-2: #6a5836;
+  --jr-text-3: #8c7a55;
+  --jr-muted: #b8a577;
+
+  --jr-gold-50: #5d3f0a;   /* darken pale tint so it reads on cream */
+  --jr-gold-100: #8a6315;
+  --jr-gold-200: #b78a1f;
+  --jr-gold-300: #a07520;
+  --jr-gold-400: #8a6315;
+  --jr-gold-500: #6b4d12;
+  --jr-gold-600: #4d370a;
+  --jr-gold-shine: linear-gradient(180deg, #c8972a 0%, #8a6315 50%, #5d3f0a 100%);
+  --jr-gold-shine-sub: linear-gradient(180deg, #b78a1f 0%, #8a6315 100%);
+
+  --jr-green: #2d8a51;
+  --jr-red:   #b03228;
+  --jr-blue:  #2c648c;
+  --jr-purple:#6e3ea8;
+
+  --jr-emboss-top: rgba(255, 255, 255, 0.5);
+  --jr-emboss-bot: rgba(108, 78, 26, 0.10);
+  --jr-card-bg: linear-gradient(180deg, #fbf3df 0%, #f0e6cb 100%);
+  --jr-card-bg-hover: linear-gradient(180deg, #fff8e6 0%, #f3e9cf 100%);
+  --jr-card-shadow:
+    0 4px 12px rgba(108,78,26,.10),
+    0 1px 0 rgba(255,255,255,.6) inset,
+    0 -1px 0 rgba(108,78,26,.08) inset,
+    0 0 0 1px rgba(108,78,26,.10);
+  --jr-card-shadow-hover:
+    0 8px 22px rgba(108,78,26,.15),
+    0 1px 0 rgba(255,255,255,.7) inset,
+    0 0 0 1px rgba(184,138,31,.4);
+  --jr-paper-grain-opacity: 0.06;
+  --jr-page-overlay: radial-gradient(ellipse at top, rgba(184,138,31,.04) 0%, transparent 60%);
+}
+
+/* ── GLOBAL RESETS using tokens ──────────────────────────── */
+body{
+  font-family: 'Inter', 'Rajdhani', -apple-system, sans-serif !important;
+  background: var(--jr-bg) !important;
+  color: var(--jr-text) !important;
+  font-feature-settings: "ss01", "cv01", "tnum"; /* tabular numerals on by default */
+  transition: background .35s ease, color .35s ease;
+}
+body::before{
+  /* paper grain — overrides the brand layer's noise */
+  background-image:
+    var(--jr-page-overlay),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E") !important;
+  opacity: var(--jr-paper-grain-opacity) !important;
+  mix-blend-mode: multiply;
+}
+
+/* Cinzel for display, Inter for body. Big numbers tabular. */
+h1, h2, h3, .panel-title, .stat-label, .nav-tab, .modal-title{
+  font-family: 'Cinzel', serif !important;
+  letter-spacing: .04em;
+}
+.stat-value, .summary-value, .panel-stat-value, .big-number,
+[id^="d-"], [id^="p-"],
+.kpi-value, td, th, .quota-grid strong, #cf-summary-body strong{
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Display Cormorant for the most important monetary totals if we tag them */
+.jr-display{
+  font-family: 'Cormorant Garamond', 'Cinzel', serif !important;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  font-style: italic;
+}
+
+/* ── TOPBAR — embossed leather strip ─────────────────────── */
+.topbar{
+  background:
+    linear-gradient(180deg, rgba(255,220,140,.04) 0%, transparent 6%, transparent 94%, rgba(0,0,0,.4) 100%),
+    var(--jr-bg-2) !important;
+  border-bottom: 1px solid var(--jr-border-strong) !important;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 1px 0 rgba(255,220,140,.04) inset, 0 -1px 0 rgba(0,0,0,.5);
+}
+[data-jr-theme="light"] .topbar{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.5) 0%, transparent 8%, transparent 92%, rgba(108,78,26,.08) 100%),
+    var(--jr-bg-2) !important;
+  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 1px 3px rgba(108,78,26,.06);
+}
+
+/* Brand wordmark — engraved gold */
+.jr-brand-name{
+  background: var(--jr-gold-shine) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,.4));
+}
+[data-jr-theme="light"] .jr-brand-name{
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.7));
+}
+
+/* ── NAV BAR — leather inset with engraved tabs ──────────── */
+.nav{
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.18) 0%, transparent 30%),
+    var(--jr-surface) !important;
+  border-bottom: 1px solid var(--jr-border) !important;
+  padding: 0 28px;
+  display: flex; gap: 4px;
+}
+[data-jr-theme="light"] .nav{
+  background:
+    linear-gradient(180deg, rgba(108,78,26,.06) 0%, transparent 40%),
+    var(--jr-surface) !important;
+}
+.nav-tab{
+  padding: 14px 20px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: .14em !important;
+  color: var(--jr-text-3) !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 2px solid transparent !important;
+  transition: color .2s ease, background .2s ease !important;
+  position: relative;
+}
+.nav-tab:hover{
+  color: var(--jr-text) !important;
+  background: linear-gradient(180deg, rgba(200,151,42,.08), transparent 60%) !important;
+}
+.nav-tab.active{
+  color: var(--jr-gold-200) !important;
+  background: linear-gradient(180deg, rgba(200,151,42,.14), transparent 70%) !important;
+}
+[data-jr-theme="light"] .nav-tab.active{
+  color: var(--jr-gold-400) !important;
+}
+.nav .nav-tab::after{
+  background: linear-gradient(90deg, transparent, var(--jr-gold-200), transparent) !important;
+}
+
+/* ── PANELS — embossed cards ─────────────────────────────── */
+.panel,
+.stat-card,
+.workflow-column,
+#dash-content > div > div > div[class*="panel"],
+.fab-menu .fab-option{
+  background: var(--jr-card-bg) !important;
+  border: 1px solid var(--jr-border) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--jr-card-shadow) !important;
+  transition: box-shadow .25s ease, border-color .25s ease, background .25s ease, transform .2s ease !important;
+  position: relative;
+}
+.panel::before,
+.stat-card::before{
+  content: '';
+  position: absolute; top: 0; left: 12px; right: 12px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--jr-emboss-top), transparent);
+  pointer-events: none;
+}
+.panel:hover,
+.stat-card:hover{
+  background: var(--jr-card-bg-hover) !important;
+  border-color: var(--jr-border-strong) !important;
+  box-shadow: var(--jr-card-shadow-hover) !important;
+}
+
+/* Panel title — gold engraving */
+.panel-title{
+  color: var(--jr-gold-200) !important;
+  font-size: 11px !important;
+  text-transform: uppercase;
+  letter-spacing: .22em !important;
+  padding-bottom: 12px;
+  margin-bottom: 14px !important;
+  border-bottom: 1px solid var(--jr-divider);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+[data-jr-theme="light"] .panel-title{
+  color: var(--jr-gold-400) !important;
+}
+/* Halo glyph before panel titles */
+.panel-title::before{
+  content: '';
+  display: inline-block;
+  width: 18px; height: 8px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 16'><ellipse cx='18' cy='8' rx='14' ry='3' fill='none' stroke='%23c8972a' stroke-width='1.4'/><ellipse cx='18' cy='8' rx='9' ry='1.6' fill='none' stroke='%23f0b93a' stroke-width='.8' opacity='.7'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  flex-shrink: 0;
+  opacity: .85;
+}
+
+/* ── STAT CARDS — premium money tiles ────────────────────── */
+.stat-card{
+  padding: 18px 18px !important;
+  display: flex !important;
+  flex-direction: column;
+  gap: 6px;
+  cursor: default;
+}
+.stat-card[onclick]{ cursor: pointer; }
+.stat-card[onclick]:hover{ transform: translateY(-1px); }
+.stat-label{
+  color: var(--jr-text-3) !important;
+  font-size: 10px !important;
+  letter-spacing: .2em !important;
+  text-transform: uppercase;
+  font-weight: 600 !important;
+  display: flex; align-items: center; gap: 6px;
+}
+.stat-value{
+  font-family: 'Cormorant Garamond', 'Cinzel', serif !important;
+  font-weight: 600 !important;
+  font-size: 30px !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.05 !important;
+  color: var(--jr-text) !important;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-variant-numeric: tabular-nums lining-nums;
+  background: var(--jr-gold-shine);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,.35));
+}
+[data-jr-theme="light"] .stat-value{
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.7));
+}
+.stat-value.red{
+  background: linear-gradient(180deg, #ff8478, #c43c30) !important;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.stat-value.green, .stat-value[style*="3dba6e"]{
+  background: linear-gradient(180deg, #7ee9a3, #2d8a51) !important;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.stat-sub{
+  color: var(--jr-text-3) !important;
+  font-size: 11px !important;
+  letter-spacing: .03em !important;
+  margin-top: 4px;
+}
+
+/* ── BUTTONS — engraved gold pills ───────────────────────── */
+.btn-refresh,
+.fab,
+.btn-save,
+.btn-primary,
+button.btn-primary{
+  background: var(--jr-gold-shine) !important;
+  color: #1a1208 !important;
+  border: 1px solid var(--jr-gold-300) !important;
+  border-radius: 10px !important;
+  padding: 8px 16px !important;
+  font-family: 'Cinzel', serif !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+  text-transform: uppercase;
+  letter-spacing: .14em !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.4) inset,
+    0 -1px 0 rgba(0,0,0,.25) inset,
+    0 4px 10px rgba(0,0,0,.3);
+  transition: transform .15s ease, box-shadow .2s ease, filter .2s ease !important;
+  cursor: pointer;
+}
+.btn-refresh:hover,
+.btn-save:hover,
+.fab:hover,
+button.btn-primary:hover{
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.5) inset,
+    0 -1px 0 rgba(0,0,0,.25) inset,
+    0 6px 14px rgba(200,151,42,.4),
+    0 0 0 1px var(--jr-gold-200);
+}
+.btn-refresh:active,
+.btn-save:active,
+.fab:active{
+  transform: translateY(0);
+  filter: brightness(.95);
+}
+
+.btn-cancel,
+.btn-archive,
+.btn-manage-goals{
+  background: transparent !important;
+  color: var(--jr-text-2) !important;
+  border: 1px solid var(--jr-border-strong) !important;
+  border-radius: 8px !important;
+  padding: 6px 12px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: .08em !important;
+  transition: all .2s ease !important;
+}
+.btn-cancel:hover,
+.btn-archive:hover,
+.btn-manage-goals:hover{
+  border-color: var(--jr-gold-200) !important;
+  color: var(--jr-gold-200) !important;
+  background: rgba(200,151,42,.08) !important;
+}
+
+/* FAB (the gold + button) — round, embossed */
+.fab{
+  border-radius: 50% !important;
+  padding: 0 !important;
+  width: 56px !important; height: 56px !important;
+  font-size: 28px !important;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 300 !important;
+  letter-spacing: 0 !important;
+}
+
+/* ── INPUTS / SEARCH ─────────────────────────────────────── */
+input, select, textarea, .form-input, .form-select, .form-textarea{
+  background: var(--jr-surface-2) !important;
+  border: 1px solid var(--jr-border) !important;
+  color: var(--jr-text) !important;
+  border-radius: 8px !important;
+  font-family: 'Inter', sans-serif !important;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease !important;
+}
+input:focus, select:focus, textarea:focus,
+.form-input:focus, .form-select:focus, .form-textarea:focus{
+  outline: 0 !important;
+  border-color: var(--jr-gold-200) !important;
+  box-shadow: 0 0 0 3px rgba(200,151,42,.18) !important;
+}
+.header-find input{
+  background: var(--jr-surface) !important;
+}
+
+/* ── MODAL ────────────────────────────────────────────────── */
+.modal-overlay{
+  background: rgba(5,3,1,.72) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.modal{
+  background: var(--jr-card-bg) !important;
+  border: 1px solid var(--jr-border-strong) !important;
+  border-radius: 14px !important;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.6),
+    0 0 0 1px rgba(200,151,42,.2),
+    0 1px 0 rgba(255,220,140,.08) inset !important;
+}
+[data-jr-theme="light"] .modal{
+  box-shadow:
+    0 24px 60px rgba(108,78,26,.18),
+    0 0 0 1px rgba(184,138,31,.4),
+    0 1px 0 rgba(255,255,255,.6) inset !important;
+}
+.modal-title{
+  color: var(--jr-gold-200) !important;
+  font-family: 'Cinzel', serif !important;
+  font-size: 18px !important;
+  letter-spacing: .12em !important;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--jr-divider);
+  margin-bottom: 18px;
+  position: relative;
+}
+[data-jr-theme="light"] .modal-title{ color: var(--jr-gold-400) !important; }
+
+/* Modal title divider — ornate gold */
+.modal-title::after{
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 50%;
+  width: 80px; height: 8px;
+  transform: translateX(-50%);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 8'><path d='M0 4 L30 4 M50 4 L80 4' stroke='%23c8972a' stroke-width='1'/><circle cx='40' cy='4' r='2.5' fill='none' stroke='%23f0b93a' stroke-width='1.2'/><circle cx='40' cy='4' r='.8' fill='%23f0b93a'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* ── TABLES ──────────────────────────────────────────────── */
+table{
+  background: transparent !important;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+th{
+  font-family: 'Cinzel', serif !important;
+  font-size: 10px !important;
+  text-transform: uppercase;
+  letter-spacing: .18em !important;
+  color: var(--jr-gold-200) !important;
+  padding: 10px 14px !important;
+  border-bottom: 1px solid var(--jr-border-strong) !important;
+  background: linear-gradient(180deg, rgba(200,151,42,.06), transparent) !important;
+}
+[data-jr-theme="light"] th{ color: var(--jr-gold-400) !important; }
+td{
+  padding: 11px 14px !important;
+  border-bottom: 1px solid var(--jr-divider) !important;
+  font-size: 13px !important;
+  color: var(--jr-text) !important;
+  font-feature-settings: "tnum" 1;
+}
+tr:hover td{
+  background: rgba(200,151,42,.04) !important;
+}
+
+/* ── ACCOUNT CARDS (Portfolio) ───────────────────────────── */
+.account-card{
+  background: var(--jr-card-bg) !important;
+  border: 1px solid var(--jr-border) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--jr-card-shadow) !important;
+  transition: all .25s ease !important;
+  position: relative;
+  overflow: hidden;
+}
+.account-card::before{
+  content:'';
+  position: absolute; top: 0; left: 12px; right: 12px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--jr-emboss-top), transparent);
+  pointer-events: none;
+}
+.account-card:hover{
+  transform: translateY(-2px);
+  border-color: var(--jr-border-strong) !important;
+  box-shadow: var(--jr-card-shadow-hover) !important;
+}
+
+/* ── FAB MENU ───────────────────────────────────────────── */
+.fab-menu .fab-option{
+  background: var(--jr-card-bg) !important;
+  border: 1px solid var(--jr-border-strong) !important;
+  color: var(--jr-text) !important;
+  font-family: 'Cinzel', serif !important;
+  font-size: 11px !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase;
+  padding: 12px 16px !important;
+  border-radius: 10px !important;
+  transition: all .2s ease !important;
+  display: flex; align-items: center; gap: 10px;
+}
+.fab-menu .fab-option:hover{
+  background: var(--jr-card-bg-hover) !important;
+  border-color: var(--jr-gold-200) !important;
+  color: var(--jr-gold-100) !important;
+  transform: translateX(-2px);
+}
+
+/* ── BADGES / STATUS PILLS ──────────────────────────────── */
+[class*="status-"]{
+  font-family: 'Cinzel', serif;
+  font-size: 9.5px !important;
+  letter-spacing: .16em !important;
+  text-transform: uppercase;
+  font-weight: 600 !important;
+  padding: 3px 8px !important;
+  border-radius: 4px !important;
+  border: 1px solid currentColor;
+  background: transparent !important;
+}
+.launcher-badge{
+  font-family: 'Cinzel', serif !important;
+  letter-spacing: .12em !important;
+}
+
+/* ── HEADER STABILITY PILL (banned timer) ──────────────── */
+.header-stability{
+  background: var(--jr-surface-2) !important;
+  border: 1px solid var(--jr-border-strong) !important;
+  font-family: 'Cinzel', serif !important;
+}
+
+/* ── THEME TOGGLE in topbar ─────────────────────────────── */
+.jr-theme-toggle{
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--jr-surface-2);
+  border: 1px solid var(--jr-border);
+  border-radius: 999px;
+  padding: 4px;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  color: var(--jr-text-3);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  height: 32px;
+  transition: border-color .2s ease;
+}
+.jr-theme-toggle:hover{ border-color: var(--jr-gold-200); }
+.jr-theme-seg{
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+  padding: 0 10px; height: 24px;
+  border-radius: 999px;
+  transition: all .25s cubic-bezier(.2,.8,.2,1);
+  color: var(--jr-text-3);
+}
+.jr-theme-seg svg{ width: 12px; height: 12px; }
+.jr-theme-toggle[data-mode="dark"] .jr-theme-seg.dark{
+  background: linear-gradient(180deg, #2a1f10, #0f0a05);
+  color: var(--jr-gold-100);
+  box-shadow: 0 0 0 1px var(--jr-gold-300), 0 1px 0 rgba(255,220,140,.1) inset;
+}
+.jr-theme-toggle[data-mode="light"] .jr-theme-seg.light{
+  background: linear-gradient(180deg, #fff8e6, #f0e6cb);
+  color: var(--jr-gold-400);
+  box-shadow: 0 0 0 1px var(--jr-gold-300), 0 1px 0 rgba(255,255,255,.8) inset;
+}
+
+/* ── ORNATE DIVIDER (utility class) ─────────────────────── */
+.jr-divider{
+  display: flex; align-items: center; gap: 14px;
+  margin: 28px 0 18px;
+  color: var(--jr-gold-200);
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .3em;
+}
+[data-jr-theme="light"] .jr-divider{ color: var(--jr-gold-400); }
+.jr-divider::before, .jr-divider::after{
+  content: '';
+  flex: 1; height: 8px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8'><path d='M0 4 L80 4 M120 4 L200 4' stroke='%23c8972a' stroke-width='.8' opacity='.5'/><circle cx='100' cy='4' r='1.5' fill='%23f0b93a'/><circle cx='90' cy='4' r='.7' fill='%23c8972a'/><circle cx='110' cy='4' r='.7' fill='%23c8972a'/></svg>");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+[data-jr-theme="light"] .jr-divider::before,
+[data-jr-theme="light"] .jr-divider::after{
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8'><path d='M0 4 L80 4 M120 4 L200 4' stroke='%238a6315' stroke-width='.8' opacity='.7'/><circle cx='100' cy='4' r='1.5' fill='%23b78a1f'/><circle cx='90' cy='4' r='.7' fill='%238a6315'/><circle cx='110' cy='4' r='.7' fill='%238a6315'/></svg>");
+}
+
+/* ── EMPTY-STATE: broken helmet / ember motif ───────────── */
+.jr-empty-illo{
+  display: flex; flex-direction: column; align-items: center;
+  padding: 28px 12px 18px;
+  opacity: .85;
+}
+.jr-empty-illo svg{
+  width: 110px; height: 90px;
+  filter: drop-shadow(0 6px 16px rgba(200,151,42,.18));
+}
+.jr-empty-illo .jr-empty-title{
+  font-family: 'Cinzel', serif;
+  color: var(--jr-gold-200);
+  font-size: 11px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  margin-top: 14px;
+}
+[data-jr-theme="light"] .jr-empty-illo .jr-empty-title{ color: var(--jr-gold-400); }
+.jr-empty-illo .jr-empty-sub{
+  color: var(--jr-text-3);
+  font-size: 13px;
+  margin-top: 4px;
+  text-align: center;
+  max-width: 320px;
+}
+
+/* ── HOVER ATTENTION RING for clickable rows ─────────────── */
+[onclick]:not(button):not(input):not(.nav-tab):not(.fab-option):not(.account-card):not(.stat-card){
+  transition: background .15s ease;
+}
+
+/* ── SCROLLBAR — gold leather ───────────────────────────── */
+*::-webkit-scrollbar{ width: 10px; height: 10px; }
+*::-webkit-scrollbar-track{ background: var(--jr-bg); }
+*::-webkit-scrollbar-thumb{
+  background: linear-gradient(180deg, var(--jr-surface-3) 0%, var(--jr-surface-2) 100%);
+  border-radius: 6px;
+  border: 2px solid var(--jr-bg);
+  box-shadow: 0 0 0 1px var(--jr-border) inset;
+}
+*::-webkit-scrollbar-thumb:hover{
+  background: linear-gradient(180deg, var(--jr-gold-400) 0%, var(--jr-gold-500) 100%);
+}
+
+/* ── COMMAND PALETTE — premium glass ───────────────────── */
+#jr-palette{ background: rgba(5,3,1,.78) !important; }
+[data-jr-theme="light"] #jr-palette{ background: rgba(244,236,216,.85) !important; }
+.jr-palette-card{
+  background: var(--jr-card-bg) !important;
+  border: 1px solid var(--jr-border-strong) !important;
+}
+.jr-palette-search{
+  color: var(--jr-text) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+.jr-palette-hi{ color: var(--jr-gold-200) !important; }
+[data-jr-theme="light"] .jr-palette-hi{ color: var(--jr-gold-400) !important; }
+.jr-palette-item.active,
+.jr-palette-item:hover{
+  background: linear-gradient(90deg, rgba(200,151,42,.15), rgba(200,151,42,.04) 90%) !important;
+}
+
+/* ── COMPANION BUBBLE — themed ─────────────────────────── */
+[data-jr-theme="light"] #jr-bubble{
+  background: linear-gradient(180deg, #fff8e6 0%, #f0e6cb 100%);
+  color: var(--jr-gold-400);
+  border-color: var(--jr-border-strong);
+}
+[data-jr-theme="light"] #jr-bubble::after{
+  background: #fff8e6;
+}
+
+/* ── BODY OVERLAY — subtle vignette anchored to top ────── */
+.jr-vignette{
+  position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(200,151,42,.05) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 80% at 50% 100%, rgba(0,0,0,.3) 0%, transparent 60%);
+}
+[data-jr-theme="light"] .jr-vignette{
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(184,138,31,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 80% at 50% 100%, rgba(108,78,26,.05) 0%, transparent 60%);
+}
+
+/* ── CHART / CANVAS BACKDROP ────────────────────────────── */
+canvas{ filter: drop-shadow(0 2px 6px rgba(0,0,0,.3)); }
+
+/* ── BRAND AVATAR — bigger, more presence in topbar ────── */
+.jr-brand-avatar{
+  width: 44px !important; height: 44px !important;
+  box-shadow:
+    0 0 0 2px var(--jr-gold-300),
+    0 0 0 3px var(--jr-bg-2),
+    0 0 22px rgba(200,151,42,.3) !important;
+}
+
+/* ── COMPANION — premium frame ─────────────────────────── */
+#jr-companion{
+  box-shadow:
+    0 0 0 2px var(--jr-gold-300),
+    0 0 0 4px var(--jr-bg),
+    0 0 24px rgba(200,151,42,.4),
+    0 8px 24px rgba(0,0,0,.5) !important;
+}
+[data-jr-theme="light"] #jr-companion{
+  box-shadow:
+    0 0 0 2px var(--jr-gold-300),
+    0 0 0 4px var(--jr-bg),
+    0 0 24px rgba(184,138,31,.35),
+    0 8px 18px rgba(108,78,26,.18) !important;
+}
+
+/* ── EMBERS lighter on light theme ─────────────────────── */
+[data-jr-theme="light"] #jr-embers{ opacity: .35 !important; mix-blend-mode: multiply; }
+
+/* ── REMOVE the old dark-only .topbar override from brand.css ── */
+.topbar::after{ display: none; }
