@@ -1,0 +1,2498 @@
+/* ============================================================
+   4JIRAIYA · FEATURES STYLES
+   Companion CSS for 4jiraiya-features.js
+   ============================================================ */
+
+/* ── Glowing-blue halo motif (overrides gold halo from premium.css) ── */
+:root{
+  --jr-halo-blue: #4ec3ff;
+  --jr-halo-blue-deep: #1d6fb8;
+  --jr-halo-glow: 0 0 6px rgba(78,195,255,.65), 0 0 14px rgba(78,195,255,.35);
+}
+
+/* Halo glyph removed — ::before now empty so the panel title's
+   own emoji ( ⚔️ / 🌐 / 🎮 / 🏷️ etc.) reads as the section marker
+   on its own, instead of competing with a small ellipse glyph. */
+.panel-title::before{
+  display: none !important;
+}
+[data-jr-theme="light"] .panel-title::before{
+  display: none !important;
+}
+
+/* ──────────────────────────────────────────────────────────
+   1. DAILY DIGEST BANNER
+   ────────────────────────────────────────────────────────── */
+.jr-digest{
+  margin: 0 0 22px;
+  padding: 18px 22px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(200,151,42,.08) 0%, transparent 50%, rgba(78,195,255,.04) 100%), var(--jr-card-bg);
+  border: 1px solid var(--jr-border-strong);
+  box-shadow: var(--jr-card-shadow);
+  position: relative;
+  overflow: hidden;
+}
+.jr-digest::before{
+  content:'';
+  position: absolute; top: 0; left: 12px; right: 12px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(78,195,255,.5), transparent);
+}
+.jr-digest::after{
+  content:'';
+  position: absolute; right: -40px; top: -40px; width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(78,195,255,.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.jr-digest-inner{
+  display: flex; align-items: center; gap: 28px;
+  flex-wrap: wrap;
+  position: relative; z-index: 1;
+}
+.jr-digest-l{ display: flex; flex-direction: column; gap: 2px; min-width: 220px; }
+.jr-digest-greet{
+  font-family: 'Cormorant Garamond', 'Cinzel', serif;
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 600;
+  background: var(--jr-gold-shine);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.01em;
+}
+.jr-digest-date{
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: .25em;
+  color: var(--jr-text-3);
+  text-transform: uppercase;
+}
+.jr-digest-stats{
+  display: flex; gap: 28px; flex: 1; flex-wrap: wrap;
+}
+.jr-digest-stat{
+  display: flex; flex-direction: column; gap: 2px;
+  border-left: 1px solid var(--jr-divider);
+  padding-left: 16px;
+}
+.jr-digest-k{
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: .22em;
+  color: var(--jr-text-3);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.jr-digest-v{
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--jr-text-2);
+  font-feature-settings: 'tnum' 1;
+}
+.jr-digest-v b{
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 600;
+  color: var(--jr-text);
+  font-size: 16px;
+  margin-left: 2px;
+}
+
+/* ──────────────────────────────────────────────────────────
+   2. SPARKLINES inside KPI cards
+   ────────────────────────────────────────────────────────── */
+.jr-spark{
+  display: flex; align-items: center; gap: 10px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px dashed var(--jr-divider);
+}
+.jr-spark svg{
+  display: block;
+  flex: 1;
+  height: 28px;
+  max-width: 140px;
+  opacity: .9;
+}
+.jr-spark-trend{
+  font-family: 'Cinzel', serif;
+  font-size: 9.5px;
+  letter-spacing: .14em;
+  font-feature-settings: 'tnum' 1;
+}
+.stat-card{
+  min-height: 130px !important;
+}
+
+/* ──────────────────────────────────────────────────────────
+   3. ACCOUNT CARD HOVER PREVIEW
+   ────────────────────────────────────────────────────────── */
+#jr-hover-card{
+  position: fixed;
+  z-index: 9000;
+  width: 320px;
+  /* No max-height — let the card render all content. The positioning
+     logic in showHoverCard handles keeping the preview on-screen by
+     flipping above/below the cursor or shifting up. If a card is
+     genuinely too tall for the viewport the small overflow buffer
+     keeps it scrollable as a last resort. */
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  padding: 14px 16px;
+  background: var(--jr-card-bg);
+  border: 1px solid var(--jr-border-strong);
+  border-radius: 12px;
+  box-shadow:
+    0 14px 40px rgba(0,0,0,.55),
+    0 0 0 1px rgba(78,195,255,.15),
+    0 1px 0 rgba(255,220,140,.1) inset;
+  pointer-events: none;
+  font-family: 'Inter', sans-serif;
+  animation: jrHcIn .18s ease-out;
+}
+[data-jr-theme="light"] #jr-hover-card{
+  box-shadow:
+    0 12px 30px rgba(108,78,26,.2),
+    0 0 0 1px rgba(29,111,184,.2),
+    0 1px 0 rgba(255,255,255,.6) inset;
+}
+@keyframes jrHcIn{
+  from{ opacity: 0; transform: translateY(-4px) scale(.98); }
+  to  { opacity: 1; transform: translateY(0) scale(1); }
+}
+.jr-hc-head{
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--jr-divider);
+}
+.jr-hc-name{
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  letter-spacing: .06em;
+  color: var(--jr-gold-200);
+  font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+[data-jr-theme="light"] .jr-hc-name{ color: var(--jr-gold-400); }
+.jr-hc-status{
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: 1px solid currentColor;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+.jr-hc-type{
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--jr-text);
+  letter-spacing: .02em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-weight: 700;
+}
+.jr-hc-combat-inline{
+  color: var(--jr-text);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+.jr-hc-pending{
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(232,154,90,.12);
+  color: #e89a5a;
+  border: 1px solid rgba(232,154,90,.4);
+  font-weight: 700;
+}
+.jr-hc-desc{
+  font-style: italic;
+  font-size: 11.5px;
+  color: var(--jr-text-2);
+  background: rgba(255,255,255,.02);
+  padding: 6px 10px;
+  border-radius: 5px;
+  border-left: 2px solid var(--jr-gold-400, #c8972a);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+/* Full skills tab inside the hover preview — 3 columns × 8 rows in
+   RS skills-tab order. All 24 skills always render; missing/level-1
+   skills appear as dimmed "—" cells with the icon still visible so
+   the layout reads as a recognizable in-game skills tab.
+   Three visual tiers:
+     • is-99    — bright gold gradient + glow + larger number
+     • default  — dark cell, gold-tinted level number
+     • is-empty — heavily dimmed, dash instead of level
+*/
+.jr-hc-skills{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-bottom: 10px;
+  padding: 8px;
+  background: rgba(200,151,42,.04);
+  border: 1px solid rgba(200,151,42,.15);
+  border-radius: 6px;
+}
+
+/* Default tier — skill present with a real level (2-98). */
+.jr-hc-skills .jr-skill-cell{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 6px;
+  background: rgba(40,32,18,.55);
+  border: 1px solid rgba(200,151,42,.22);
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--jr-gold-100, #f6dc8a);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  min-width: 0;
+}
+.jr-hc-skills .jr-skill-cell img{
+  width: 15px !important;
+  height: 15px !important;
+  object-fit: contain;
+}
+
+/* 99 tier — gold gradient, glowing border, slightly larger text. */
+.jr-hc-skills .jr-skill-cell.is-99{
+  padding: 4px 6px;
+  background: linear-gradient(180deg, rgba(255,210,90,.22), rgba(200,151,42,.18));
+  border: 1.5px solid rgba(255,210,90,.55);
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffe28a;
+  box-shadow:
+    0 0 12px rgba(255,210,90,.35),
+    0 0 0 1px rgba(255,210,90,.15) inset,
+    0 1px 0 rgba(255,255,255,.08) inset;
+  text-shadow: 0 0 6px rgba(255,210,90,.6);
+}
+.jr-hc-skills .jr-skill-cell.is-99 img{
+  width: 16px !important;
+  height: 16px !important;
+  filter: drop-shadow(0 0 4px rgba(255,210,90,.4));
+}
+
+/* Empty tier — unranked / missing / level 1. Dim out so it's clearly
+   "no value" without removing the slot. */
+.jr-hc-skills .jr-skill-cell.is-empty{
+  background: rgba(40,32,18,.25);
+  border-color: rgba(120,100,60,.18);
+  color: var(--jr-text-3, #75705f);
+  font-weight: 600;
+  opacity: .6;
+}
+.jr-hc-skills .jr-skill-cell.is-empty img{
+  opacity: .55;
+  filter: grayscale(.4);
+}
+
+[data-jr-theme="light"] .jr-hc-skills{
+  background: rgba(200,151,42,.08);
+  border-color: rgba(200,151,42,.25);
+}
+[data-jr-theme="light"] .jr-hc-skills .jr-skill-cell{
+  background: rgba(255,255,255,.55);
+  border-color: rgba(180,130,30,.3);
+  color: #6b4d12;
+}
+[data-jr-theme="light"] .jr-hc-skills .jr-skill-cell.is-99{
+  color: #8b5e0a;
+  background: linear-gradient(180deg, #fff0b8, #f0c558);
+  border-color: rgba(180,130,30,.65);
+  box-shadow: 0 0 10px rgba(255,210,90,.45), 0 1px 0 rgba(255,255,255,.6) inset;
+  text-shadow: 0 1px 0 rgba(255,255,255,.6);
+}
+[data-jr-theme="light"] .jr-hc-skills .jr-skill-cell.is-empty{
+  background: rgba(220,210,180,.5);
+  border-color: rgba(180,130,30,.15);
+  color: rgba(107,77,18,.45);
+}
+
+.jr-hc-tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+.jr-hc-tag{
+  font-family: 'Inter', sans-serif;
+  font-size: 9.5px;
+  letter-spacing: .04em;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: rgba(200,151,42,.08);
+  color: var(--jr-gold-100, #f6dc8a);
+  border: 1px solid rgba(200,151,42,.25);
+  font-weight: 500;
+}
+.jr-hc-tag.jr-hc-auto-tag{
+  background: linear-gradient(180deg, rgba(255,210,90,.18), rgba(200,151,42,.10));
+  border-color: rgba(255,210,90,.45);
+  color: #ffe28a;
+  font-weight: 600;
+  position: relative;
+  padding-left: 12px;
+}
+.jr-hc-tag.jr-hc-auto-tag::before{
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #ffd76b;
+  box-shadow: 0 0 4px rgba(255,210,90,.7);
+}
+.jr-hc-auto-ic{
+  font-size: 9px;
+  margin-right: 2px;
+}
+
+/* 99-tier auto-tag pills inside the hover preview — match the
+   card-side gold trophy style at hover-card scale. */
+.jr-hc-tag.jr-hc-auto-tag-99{
+  padding: 2px 8px 2px 6px;
+  padding-left: 6px;
+  background: linear-gradient(180deg, rgba(255,210,90,.32), rgba(200,151,42,.20));
+  border: 1.5px solid rgba(255,210,90,.65);
+  color: #ffe8a0;
+  font-weight: 800;
+  font-size: 10.5px;
+  letter-spacing: .02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 10px rgba(255,210,90,.4),
+    0 0 0 1px rgba(255,210,90,.15) inset;
+  text-shadow: 0 0 5px rgba(255,210,90,.5);
+}
+/* Skip the gold-dot prefix — 99 tier already has its skill icon */
+.jr-hc-tag.jr-hc-auto-tag-99::before{
+  display: none;
+}
+.jr-hc-99-ic{
+  width: 13px !important;
+  height: 13px !important;
+  object-fit: contain;
+  filter: drop-shadow(0 0 3px rgba(255,210,90,.6));
+}
+.jr-hc-99-num{
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .02em;
+}
+[data-jr-theme="light"] .jr-hc-tag.jr-hc-auto-tag-99{
+  color: #8b5e0a;
+  background: linear-gradient(180deg, #fff0b8, #f0c558);
+  border-color: rgba(180,130,30,.7);
+  text-shadow: 0 1px 0 rgba(255,255,255,.55);
+}
+
+/* ════════════════════════════════════════════════════════════
+   EXPANDED CARD: description edit, bottom action row, etc.
+   ════════════════════════════════════════════════════════════ */
+
+/* Description row — text + pencil button on the right */
+.ac-desc-row{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  background: rgba(255,255,255,.02);
+  border-left: 2px solid var(--gold, #c8972a);
+  border-radius: 4px;
+  margin: 6px 0 8px;
+  font-size: 12px;
+  color: var(--text-2, #d6cdb8);
+  font-style: italic;
+  line-height: 1.45;
+}
+.ac-desc-row.ac-desc-empty{
+  background: rgba(255,255,255,.015);
+  border-left-color: rgba(200,151,42,.25);
+  font-style: normal;
+}
+.ac-desc-text{ flex: 1; min-width: 0; }
+.ac-desc-placeholder{
+  color: var(--muted, #75705f);
+  font-size: 11.5px;
+  flex: 1;
+}
+.ac-desc-edit{
+  flex-shrink: 0;
+  width: 24px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--border-strong, rgba(200,151,42,.35));
+  background: rgba(200,151,42,.08);
+  color: var(--gold-lt, #f6dc8a);
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ac-desc-edit:hover{
+  background: rgba(200,151,42,.18);
+  border-color: var(--gold, #c8972a);
+  transform: translateY(-1px);
+}
+[data-jr-theme="light"] .ac-desc-row{
+  background: rgba(255,248,232,.7);
+  color: #4a3712;
+}
+[data-jr-theme="light"] .ac-desc-edit{
+  color: #6b4d12;
+}
+
+/* Bottom action row: Source (left) | Archive (center) | RIP (right) */
+.ac-bottom-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 10px 0;
+  margin-top: 12px;
+  border-top: 1px solid var(--border, rgba(200,151,42,.18));
+}
+.ac-bottom-row .ac-source-label{
+  font-size: 11px;
+  color: var(--muted, #75705f);
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ac-bottom-row .btn-archive{
+  flex-shrink: 0;
+}
+.ac-bottom-row .ac-bottom-rip,
+.ac-bottom-row .ac-bottom-rip-spacer{
+  flex-shrink: 0;
+  margin-left: auto;
+  /* keep RIP visually pinned right */
+}
+.ac-bottom-row .ac-bottom-rip-spacer{
+  width: 0;
+}
+.ac-bottom-row .btn-banned{
+  margin: 0;
+}
+
+/* Wrapper for manual + auto tags in expanded view (single tag row) */
+.ac-tags-wrap{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+.ac-tags-wrap .ac-tag-row{
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.ac-auto-tags-slot{
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   FILTER RACK — 4-column compact layout for the filter panels
+   (Account Types | Proxies | Launcher | Tags). Each panel is
+   shorter, and chips inside stack vertically as a list rather
+   than wrapping horizontally — saves a lot of vertical space.
+   ════════════════════════════════════════════════════════════ */
+.jr-filter-rack{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+@media (max-width: 1100px){
+  .jr-filter-rack{ grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}
+@media (max-width: 640px){
+  .jr-filter-rack{ grid-template-columns: 1fr; }
+}
+.jr-filter-rack .jr-filter-panel{
+  padding: 12px 14px !important;
+  margin-bottom: 0 !important;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  /* Cap each panel's height so a long tag list doesn't push others down.
+     Internal scroll keeps the rack uniform. */
+  max-height: 280px;
+}
+.jr-filter-rack .jr-filter-panel .panel-title{
+  font-size: 11px !important;
+  margin-bottom: 8px !important;
+  letter-spacing: .08em !important;
+}
+.jr-filter-rack .jr-filter-panel .panel-title > span{
+  /* Hide the long "Click to filter" hint inside the compact rack */
+  display: none !important;
+}
+.jr-filter-rack .jr-filter-list{
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  overflow-y: auto;
+  flex: 1;
+  margin: 0 !important;
+  padding-right: 4px;
+}
+/* Style the scrollbar inside compact filter panels */
+.jr-filter-rack .jr-filter-list::-webkit-scrollbar{ width: 5px; }
+.jr-filter-rack .jr-filter-list::-webkit-scrollbar-track{ background: transparent; }
+.jr-filter-rack .jr-filter-list::-webkit-scrollbar-thumb{
+  background: rgba(200,151,42,.25);
+  border-radius: 3px;
+}
+
+/* Account-type stat-cards in compact form: rendered as a single-line
+   row matching the proxy/launcher/tag chips next to them.
+   Layout: [icon] [Type Label] .................... [count]
+   The breakdown text (24 Inventory · 1 Building...) is hidden inline
+   and surfaced via the card's title="" tooltip on hover. */
+.jr-filter-rack .stat-card{
+  padding: 5px 9px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  background: var(--surface);
+  min-width: 0;
+  border-radius: 4px !important;
+  position: relative;
+  overflow: hidden;
+}
+/* Remove the slim gold underline that sits across the bottom edge —
+   doesn't read at this row size and creates visual clutter. */
+.jr-filter-rack .stat-card::after{
+  display: none !important;
+}
+/* Label = icon + type name. Stays left, takes the available row space. */
+.jr-filter-rack .stat-card .stat-label{
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0 !important;
+  font-size: 11px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+  color: var(--text, #ece4d3) !important;
+  letter-spacing: .02em !important;
+  text-transform: none !important;
+  line-height: 1.3 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.jr-filter-rack .stat-card .stat-label img{
+  width: 13px !important;
+  height: 13px !important;
+  flex-shrink: 0;
+}
+/* Count = small gold pill at the right edge, mirroring .chip-count */
+.jr-filter-rack .stat-card .stat-value{
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-variant-numeric: tabular-nums;
+  color: var(--gold-lt, #f6dc8a) !important;
+  margin: 0 !important;
+  background: none !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: none !important;
+  filter: none !important;
+  flex-shrink: 0;
+  line-height: 1.2 !important;
+}
+/* Hide the inline status breakdown — shown as title tooltip instead. */
+.jr-filter-rack .stat-card .stat-sub{
+  display: none !important;
+}
+
+/* Proxy/launcher/tag chips in vertical list mode — full-width pills */
+.jr-filter-rack .proxy-chip,
+.jr-filter-rack .launcher-chip,
+.jr-filter-rack .tag-chip{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 11px !important;
+  padding: 5px 9px !important;
+  border-radius: 4px !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+.jr-filter-rack .chip-count{
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold-lt, #f6dc8a);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.jr-filter-rack .chip-count::before{ content: ''; }
+
+/* Auto-tag chips in the filter row — gold-tinted, with the same
+   gold-dot marker as the card-side auto-tag pills. */
+.tag-chip.jr-auto-tag-chip{
+  background: linear-gradient(180deg, rgba(200,151,42,.16), rgba(200,151,42,.08)) !important;
+  border-color: rgba(200,151,42,.45) !important;
+  color: var(--gold-lt, #f6dc8a) !important;
+  position: relative;
+}
+.jr-filter-rack .tag-chip.jr-auto-tag-chip{
+  padding-left: 14px !important;
+}
+.jr-filter-rack .tag-chip.jr-auto-tag-chip::before{
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--gold, #c8972a);
+  box-shadow: 0 0 4px rgba(200,151,42,.6);
+}
+.tag-chip.jr-auto-tag-chip.jr-auto-tag-chip-99{
+  background: linear-gradient(180deg, rgba(255,210,90,.32), rgba(200,151,42,.20)) !important;
+  border: 1.5px solid rgba(255,210,90,.55) !important;
+  color: #ffe8a0 !important;
+  box-shadow: 0 0 8px rgba(255,210,90,.3) !important;
+  text-shadow: 0 0 5px rgba(255,210,90,.45);
+}
+.tag-chip.jr-auto-tag-chip.jr-auto-tag-chip-99::before{
+  display: none !important;
+}
+.jr-auto-chip-ic{
+  width: 13px; height: 13px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 3px rgba(255,210,90,.6));
+}
+.jr-auto-chip-99{
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  margin-left: 3px;
+}
+.jr-auto-chip-emoji{
+  font-size: 11px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   DESCRIPTION EDITOR MODAL (✏️ → opens this)
+   ════════════════════════════════════════════════════════════ */
+#jr-desc-modal{
+  position: fixed;
+  inset: 0;
+  z-index: 9700;
+  background: rgba(5,5,5,.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 18vh;
+  animation: jrSmFade .25s ease;
+}
+#jr-desc-modal.show{ display: flex; }
+.jr-dm-card{
+  width: min(540px, 92vw);
+  background: linear-gradient(180deg, #1a140d 0%, #0e0b07 100%);
+  border: 1px solid rgba(200,151,42,.4);
+  border-radius: 12px;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.7),
+    0 0 0 1px rgba(200,151,42,.15);
+  padding: 18px 20px;
+  animation: jrSmIn .35s cubic-bezier(.2,.8,.2,1);
+}
+[data-jr-theme="light"] .jr-dm-card{
+  background: linear-gradient(180deg, #fcf3dc 0%, #f4e6c2 100%);
+}
+.jr-dm-head{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(200,151,42,.18);
+}
+.jr-dm-title{
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--jr-gold-100, #f6dc8a);
+}
+.jr-dm-sub{
+  font-size: 11px;
+  color: var(--jr-text-3, #75705f);
+  margin-top: 4px;
+}
+.jr-dm-close{
+  width: 28px; height: 28px;
+  flex-shrink: 0;
+  border: 1px solid rgba(200,151,42,.3);
+  background: rgba(200,151,42,.06);
+  color: var(--jr-text-2, #b4ad9e);
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.jr-dm-close:hover{
+  background: rgba(214,83,74,.12);
+  border-color: rgba(214,83,74,.4);
+  color: #d6534a;
+}
+.jr-dm-textarea{
+  width: 100%;
+  min-height: 120px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(200,151,42,.25);
+  border-radius: 6px;
+  color: var(--jr-text, #ece4d3);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: vertical;
+  font-style: italic;
+}
+.jr-dm-textarea:focus{
+  outline: none;
+  border-color: rgba(200,151,42,.55);
+  box-shadow: 0 0 0 2px rgba(200,151,42,.15);
+}
+[data-jr-theme="light"] .jr-dm-textarea{
+  background: rgba(255,255,255,.7);
+  color: #4a3712;
+}
+.jr-dm-foot{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+.jr-dm-hint{
+  font-size: 10px;
+  color: var(--jr-text-3, #75705f);
+  letter-spacing: .04em;
+}
+.jr-dm-actions{
+  display: flex;
+  gap: 8px;
+}
+.jr-dm-cancel,
+.jr-dm-save{
+  padding: 7px 14px;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  transition: all .15s ease;
+}
+.jr-dm-cancel{
+  background: transparent;
+  border: 1px solid rgba(200,151,42,.3);
+  color: var(--jr-text-2, #b4ad9e);
+}
+.jr-dm-cancel:hover{
+  background: rgba(200,151,42,.08);
+  border-color: rgba(200,151,42,.5);
+}
+.jr-dm-save{
+  background: linear-gradient(180deg, var(--jr-gold-300, #d6a02d), var(--jr-gold-500, #b78420));
+  border: 1px solid var(--jr-gold-200, #f0b93a);
+  color: #2a1d09;
+  box-shadow: 0 0 8px rgba(200,151,42,.3);
+}
+.jr-dm-save:hover{
+  filter: brightness(1.1);
+}
+.jr-dm-save:disabled{
+  opacity: .5;
+  cursor: wait;
+}
+
+/* ════════════════════════════════════════════════════════════
+   PREMIUM AMBIENT EFFECTS
+   Five layered effects, each with its own pace, so the page
+   feels alive without competing for attention:
+     1. Workflow column headers — slow status-tinted sheen drift
+     2. Panel/section headers   — gold gradient drift + hover foil
+     3. KPI numbers             — count-up animation on data load
+     4. Refresh button + active filter chip — foil shimmer (always)
+     5. Primary buttons         — press-down on click
+   ════════════════════════════════════════════════════════════ */
+
+/* ── 1. WORKFLOW COLUMN HEADERS — status-tinted ember sheen ────
+   A bright horizontal sheen sweeps left-to-right across the header
+   every ~5s. While the sheen is overhead, the header text itself
+   pulses with a matching colored glow (same status hue), so the
+   whole header lights up in tinted color rather than just having
+   a thin highlight pass over it. The sheens stagger across columns
+   so your eye catches one column glowing at a time. */
+.workflow-column-header{
+  position: relative;
+  overflow: hidden;
+  /* Soft ambient color glow on the header is set per-status below. */
+  transition: background .3s ease;
+}
+/* Ambient text-shadow that constantly tints the header text with its
+   column's status color — subtle even before the sheen hits, so the
+   color identity is always present, not just during the sweep. */
+.workflow-column-header > *{
+  position: relative;
+  z-index: 1;
+  text-shadow:
+    0 0 8px var(--jr-wc-ambient, transparent),
+    0 0 16px var(--jr-wc-ambient, transparent);
+  animation: jrWorkflowTextPulse 5.2s ease-in-out infinite;
+}
+@keyframes jrWorkflowTextPulse{
+  0%, 100% {
+    text-shadow:
+      0 0 6px var(--jr-wc-ambient, transparent),
+      0 0 12px var(--jr-wc-ambient, transparent);
+  }
+  35%, 55% {
+    text-shadow:
+      0 0 14px var(--jr-wc-pulse, var(--jr-wc-ambient, transparent)),
+      0 0 26px var(--jr-wc-pulse, var(--jr-wc-ambient, transparent)),
+      0 0 38px var(--jr-wc-pulse, var(--jr-wc-ambient, transparent));
+  }
+}
+.workflow-column-header::after{
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -55%;
+  width: 55%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    var(--jr-wc-sheen, rgba(255,255,255,.12)) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  animation: jrWorkflowSheen 5.2s ease-in-out infinite;
+  /* Soft blur so the sheen reads as light wash, not a hard band */
+  filter: blur(.5px);
+}
+@keyframes jrWorkflowSheen{
+  0%   { left: -55%; opacity: 0; }
+  20%  { opacity: 1; }
+  60%  { left: 100%; opacity: 0; }
+  100% { left: 100%; opacity: 0; }
+}
+/* Per-status sheen tints — bright sheen + ambient text glow + pulse glow */
+.workflow-column[data-status="Inventory"] .workflow-column-header{
+  --jr-wc-sheen:   rgba(122,178,219,.65);
+  --jr-wc-ambient: rgba(122,178,219,.25);
+  --jr-wc-pulse:   rgba(122,178,219,.85);
+  background: linear-gradient(180deg, rgba(122,178,219,.10), rgba(122,178,219,.03));
+}
+.workflow-column[data-status="Building"] .workflow-column-header{
+  --jr-wc-sheen:   rgba(232,154,90,.65);
+  --jr-wc-ambient: rgba(232,154,90,.28);
+  --jr-wc-pulse:   rgba(255,180,110,.9);
+  background: linear-gradient(180deg, rgba(232,154,90,.10), rgba(232,154,90,.03));
+}
+.workflow-column[data-status="Listed"] .workflow-column-header{
+  --jr-wc-sheen:   rgba(192,155,216,.65);
+  --jr-wc-ambient: rgba(192,155,216,.28);
+  --jr-wc-pulse:   rgba(220,180,240,.9);
+  background: linear-gradient(180deg, rgba(192,155,216,.10), rgba(192,155,216,.03));
+}
+.workflow-column[data-status="Sold"] .workflow-column-header{
+  --jr-wc-sheen:   rgba(95,196,133,.65);
+  --jr-wc-ambient: rgba(95,196,133,.28);
+  --jr-wc-pulse:   rgba(130,230,165,.9);
+  background: linear-gradient(180deg, rgba(95,196,133,.10), rgba(95,196,133,.03));
+}
+.workflow-column[data-status="Banned"] .workflow-column-header{
+  --jr-wc-sheen:   rgba(214,83,74,.65);
+  --jr-wc-ambient: rgba(214,83,74,.28);
+  --jr-wc-pulse:   rgba(255,120,110,.9);
+  background: linear-gradient(180deg, rgba(214,83,74,.10), rgba(214,83,74,.03));
+}
+/* Stagger sheen + text-pulse so they fire together per column but
+   the cycle is offset between columns. Both animations share the
+   5.2s duration so they stay locked. */
+.workflow-column[data-status="Inventory"] .workflow-column-header::after,
+.workflow-column[data-status="Inventory"] .workflow-column-header > *{ animation-delay: 0s; }
+.workflow-column[data-status="Building"]  .workflow-column-header::after,
+.workflow-column[data-status="Building"]  .workflow-column-header > *{ animation-delay: 1s; }
+.workflow-column[data-status="Listed"]    .workflow-column-header::after,
+.workflow-column[data-status="Listed"]    .workflow-column-header > *{ animation-delay: 2s; }
+.workflow-column[data-status="Sold"]      .workflow-column-header::after,
+.workflow-column[data-status="Sold"]      .workflow-column-header > *{ animation-delay: 3s; }
+.workflow-column[data-status="Banned"]    .workflow-column-header::after,
+.workflow-column[data-status="Banned"]    .workflow-column-header > *{ animation-delay: 4s; }
+
+/* Honor reduced-motion: turn off the sheen + pulse for users who've
+   asked their OS to minimize animation. The ambient tint stays. */
+@media (prefers-reduced-motion: reduce){
+  .workflow-column-header::after{ display: none; }
+  .workflow-column-header > *{ animation: none !important; }
+}
+
+/* ── 2. PANEL / SECTION HEADERS — ambient gold breathing + hover foil
+   Note: the previous version used `background-clip: text` to put a
+   moving gradient on the title text. That approach didn't propagate
+   through flex containers reliably (Chromium quirk) and made some
+   titles render invisible. This version keeps the existing gold
+   `color` from premium.css and adds a subtle text-shadow glow that
+   pulses on a long cycle — same "alive" feeling, no clipping risk. */
+.panel-title{
+  position: relative;
+  overflow: visible;
+  text-shadow:
+    0 0 6px rgba(200,151,42,.35),
+    0 0 14px rgba(200,151,42,.18);
+  animation: jrPanelGlowPulse 9s ease-in-out infinite;
+}
+@keyframes jrPanelGlowPulse{
+  0%, 100% {
+    text-shadow:
+      0 0 4px rgba(200,151,42,.25),
+      0 0 10px rgba(200,151,42,.12);
+  }
+  50% {
+    text-shadow:
+      0 0 10px rgba(255,210,90,.55),
+      0 0 22px rgba(255,210,90,.28);
+  }
+}
+[data-jr-theme="light"] .panel-title{
+  text-shadow:
+    0 0 4px rgba(180,130,30,.18),
+    0 0 8px rgba(180,130,30,.08);
+}
+[data-jr-theme="light"] .panel-title{
+  animation: jrPanelGlowPulseLight 9s ease-in-out infinite;
+}
+@keyframes jrPanelGlowPulseLight{
+  0%, 100% { text-shadow: 0 0 3px rgba(180,130,30,.15), 0 0 7px rgba(180,130,30,.06); }
+  50%      { text-shadow: 0 0 7px rgba(200,151,42,.35), 0 0 14px rgba(200,151,42,.18); }
+}
+/* Hover-only foil sweep — uses a background-image gradient on a
+   masked layer instead of background-clip:text, so it works in
+   flex containers. The sweep is applied via ::after which is a
+   positioned absolute overlay that doesn't touch the text fill. */
+.panel-title::after{
+  content: '';
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: -10%;
+  width: 30%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255,255,255,.35) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  opacity: 0;
+  /* Mask the sheen so it only paints over the title's text bounding
+     area, not the whole row — uses a semi-transparent overlay that
+     looks like a foil glint without blocking the buttons next to it. */
+  mix-blend-mode: overlay;
+}
+.panel-title:hover::after{
+  animation: jrFoilSweep .9s ease-out forwards;
+}
+@keyframes jrFoilSweep{
+  0%   { left: -30%; opacity: 0; }
+  15%  { opacity: 1; }
+  100% { left: 130%; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce){
+  .panel-title{ animation: none !important; }
+  .panel-title:hover::after{ animation: none !important; opacity: 0; }
+}
+
+/* ── 2b. STATUS + TYPE BADGES — breathing color glow ────────
+   Same color identity treatment as the workflow headers but
+   without the horizontal sheen — just the breathing pulse on
+   each badge's accent color. Each badge becomes its own little
+   ember of color, ambient at rest and brighter at the pulse.
+   Applies to compact + medium views; the on-card pills as well
+   as anywhere else .status-* / .type-* classes are used. */
+
+/* Status badges — five colors matching the workflow column tints */
+.status-inventory{
+  text-shadow:
+    0 0 4px rgba(122,178,219,.35),
+    0 0 8px rgba(122,178,219,.18);
+  animation: jrBadgePulseInventory 4.5s ease-in-out infinite;
+}
+@keyframes jrBadgePulseInventory{
+  0%, 100% {
+    text-shadow:
+      0 0 3px rgba(122,178,219,.25),
+      0 0 7px rgba(122,178,219,.10);
+    box-shadow: 0 0 0 0 rgba(122,178,219,0);
+  }
+  50% {
+    text-shadow:
+      0 0 8px rgba(160,210,240,.7),
+      0 0 16px rgba(122,178,219,.4),
+      0 0 24px rgba(122,178,219,.2);
+    box-shadow: 0 0 12px rgba(122,178,219,.25);
+  }
+}
+
+.status-building{
+  text-shadow:
+    0 0 4px rgba(232,154,90,.35),
+    0 0 8px rgba(232,154,90,.18);
+  animation: jrBadgePulseBuilding 4.5s ease-in-out infinite;
+  animation-delay: .9s;
+}
+@keyframes jrBadgePulseBuilding{
+  0%, 100% {
+    text-shadow:
+      0 0 3px rgba(232,154,90,.28),
+      0 0 7px rgba(232,154,90,.12);
+    box-shadow: 0 0 0 0 rgba(232,154,90,0);
+  }
+  50% {
+    text-shadow:
+      0 0 8px rgba(255,180,110,.75),
+      0 0 16px rgba(232,154,90,.45),
+      0 0 24px rgba(232,154,90,.22);
+    box-shadow: 0 0 12px rgba(232,154,90,.28);
+  }
+}
+
+.status-listed{
+  text-shadow:
+    0 0 4px rgba(192,155,216,.35),
+    0 0 8px rgba(192,155,216,.18);
+  animation: jrBadgePulseListed 4.5s ease-in-out infinite;
+  animation-delay: 1.8s;
+}
+@keyframes jrBadgePulseListed{
+  0%, 100% {
+    text-shadow:
+      0 0 3px rgba(192,155,216,.28),
+      0 0 7px rgba(192,155,216,.12);
+    box-shadow: 0 0 0 0 rgba(192,155,216,0);
+  }
+  50% {
+    text-shadow:
+      0 0 8px rgba(220,180,240,.75),
+      0 0 16px rgba(192,155,216,.45),
+      0 0 24px rgba(192,155,216,.22);
+    box-shadow: 0 0 12px rgba(192,155,216,.28);
+  }
+}
+
+.status-sold{
+  text-shadow:
+    0 0 4px rgba(95,196,133,.35),
+    0 0 8px rgba(95,196,133,.18);
+  animation: jrBadgePulseSold 4.5s ease-in-out infinite;
+  animation-delay: 2.7s;
+}
+@keyframes jrBadgePulseSold{
+  0%, 100% {
+    text-shadow:
+      0 0 3px rgba(95,196,133,.28),
+      0 0 7px rgba(95,196,133,.12);
+    box-shadow: 0 0 0 0 rgba(95,196,133,0);
+  }
+  50% {
+    text-shadow:
+      0 0 8px rgba(130,230,165,.75),
+      0 0 16px rgba(95,196,133,.45),
+      0 0 24px rgba(95,196,133,.22);
+    box-shadow: 0 0 12px rgba(95,196,133,.28);
+  }
+}
+
+.status-banned{
+  text-shadow:
+    0 0 4px rgba(214,83,74,.35),
+    0 0 8px rgba(214,83,74,.18);
+  animation: jrBadgePulseBanned 4.5s ease-in-out infinite;
+  animation-delay: 3.6s;
+}
+@keyframes jrBadgePulseBanned{
+  0%, 100% {
+    text-shadow:
+      0 0 3px rgba(214,83,74,.28),
+      0 0 7px rgba(214,83,74,.12);
+    box-shadow: 0 0 0 0 rgba(214,83,74,0);
+  }
+  50% {
+    text-shadow:
+      0 0 8px rgba(255,120,110,.75),
+      0 0 16px rgba(214,83,74,.45),
+      0 0 24px rgba(214,83,74,.22);
+    box-shadow: 0 0 12px rgba(214,83,74,.28);
+  }
+}
+
+/* Type badges — same breathing pattern, each tied to the type's
+   own accent color. Slightly slower (5.5s) and different stagger
+   so they don't lock-step with the status badges next to them. */
+.badge-hcim{
+  animation: jrBadgePulseHCIM 5.5s ease-in-out infinite;
+  animation-delay: .4s;
+}
+@keyframes jrBadgePulseHCIM{
+  0%, 100% { text-shadow: 0 0 3px rgba(232,119,119,.25), 0 0 7px rgba(232,119,119,.1); box-shadow: 0 0 0 0 rgba(232,119,119,0); }
+  50%      { text-shadow: 0 0 8px rgba(255,150,150,.7), 0 0 16px rgba(232,119,119,.4); box-shadow: 0 0 10px rgba(232,119,119,.25); }
+}
+
+.badge-iron, .badge-uim{
+  animation: jrBadgePulseIron 5.5s ease-in-out infinite;
+  animation-delay: 1.3s;
+}
+@keyframes jrBadgePulseIron{
+  0%, 100% { text-shadow: 0 0 3px rgba(220,225,235,.2), 0 0 7px rgba(220,225,235,.08); box-shadow: 0 0 0 0 rgba(220,225,235,0); }
+  50%      { text-shadow: 0 0 7px rgba(255,255,255,.55), 0 0 14px rgba(220,225,235,.3); box-shadow: 0 0 9px rgba(220,225,235,.18); }
+}
+
+.badge-pure{
+  animation: jrBadgePulsePure 5.5s ease-in-out infinite;
+  animation-delay: 2.2s;
+}
+@keyframes jrBadgePulsePure{
+  0%, 100% { text-shadow: 0 0 3px rgba(205,166,122,.25), 0 0 7px rgba(205,166,122,.1); box-shadow: 0 0 0 0 rgba(205,166,122,0); }
+  50%      { text-shadow: 0 0 8px rgba(230,195,150,.7), 0 0 16px rgba(205,166,122,.38); box-shadow: 0 0 10px rgba(205,166,122,.22); }
+}
+
+.badge-gim{
+  animation: jrBadgePulseGIM 5.5s ease-in-out infinite;
+  animation-delay: 3.1s;
+}
+@keyframes jrBadgePulseGIM{
+  0%, 100% { text-shadow: 0 0 3px rgba(122,178,219,.25), 0 0 7px rgba(122,178,219,.1); box-shadow: 0 0 0 0 rgba(122,178,219,0); }
+  50%      { text-shadow: 0 0 8px rgba(160,210,240,.7), 0 0 16px rgba(122,178,219,.4); box-shadow: 0 0 10px rgba(122,178,219,.25); }
+}
+
+.badge-main{
+  animation: jrBadgePulseMain 5.5s ease-in-out infinite;
+  animation-delay: 4s;
+}
+@keyframes jrBadgePulseMain{
+  0%, 100% { text-shadow: 0 0 3px rgba(155,160,216,.25), 0 0 7px rgba(155,160,216,.1); box-shadow: 0 0 0 0 rgba(155,160,216,0); }
+  50%      { text-shadow: 0 0 8px rgba(195,200,245,.7), 0 0 16px rgba(155,160,216,.4); box-shadow: 0 0 10px rgba(155,160,216,.25); }
+}
+
+.badge-skill{
+  animation: jrBadgePulseSkill 5.5s ease-in-out infinite;
+  animation-delay: 4.9s;
+}
+@keyframes jrBadgePulseSkill{
+  0%, 100% { text-shadow: 0 0 3px rgba(192,155,216,.25), 0 0 7px rgba(192,155,216,.1); box-shadow: 0 0 0 0 rgba(192,155,216,0); }
+  50%      { text-shadow: 0 0 8px rgba(220,180,240,.7), 0 0 16px rgba(192,155,216,.4); box-shadow: 0 0 10px rgba(192,155,216,.28); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .status-inventory, .status-building, .status-listed, .status-sold, .status-banned,
+  .badge-hcim, .badge-iron, .badge-uim, .badge-pure, .badge-gim, .badge-main, .badge-skill{
+    animation: none !important;
+  }
+}
+
+/* ── 3. KPI COUNT-UP — handled in JS (see features.js), but we
+   add a brief gold flash on .jr-kpi-just-updated to give visual
+   feedback when a number completes its count-up. */
+.stat-value.jr-kpi-just-updated{
+  animation: jrKpiFlash .9s ease-out;
+}
+@keyframes jrKpiFlash{
+  0%   { filter: drop-shadow(0 0 0 rgba(200,151,42,0));   }
+  30%  { filter: drop-shadow(0 0 14px rgba(255,210,90,.6)); }
+  100% { filter: drop-shadow(0 0 0 rgba(200,151,42,0));   }
+}
+
+/* ── 4. REFRESH BUTTON & ACTIVE FILTER CHIP — foil shimmer ────
+   Same loop the 99 pills use (jr99Shimmer) but slightly stronger
+   so it reads on the larger surface. Refreshes on a 4s cycle. */
+.btn-refresh{
+  position: relative;
+  overflow: hidden;
+}
+.btn-refresh::after{
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: -50%;
+  width: 50%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255,255,255,.45) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  animation: jrRefreshShimmer 4s ease-in-out infinite;
+}
+@keyframes jrRefreshShimmer{
+  0%   { left: -60%; opacity: 0; }
+  25%  { opacity: 1; }
+  60%  { left: 110%; opacity: 0; }
+  100% { left: 110%; opacity: 0; }
+}
+/* When the button is hovered, accelerate the shimmer for feedback */
+.btn-refresh:hover::after{
+  animation-duration: 2s;
+}
+/* Active filter chips (proxy/launcher/tag) — softer foil so it
+   doesn't compete with the active 99 chips next to it. Skipping
+   .stat-card.active-filter because those already have a gold
+   underline via ::after that we don't want to clobber. */
+.proxy-chip.active-filter,
+.tag-chip.active-filter{
+  position: relative;
+  overflow: hidden;
+}
+.proxy-chip.active-filter::after,
+.tag-chip.active-filter::after{
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: -55%;
+  width: 45%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255,210,90,.28) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  animation: jrFilterChipSheen 4.5s ease-in-out infinite;
+  z-index: 1;
+}
+@keyframes jrFilterChipSheen{
+  0%   { left: -55%; opacity: 0; }
+  20%  { opacity: 1; }
+  55%  { left: 110%; opacity: 0; }
+  100% { left: 110%; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce){
+  .btn-refresh::after,
+  .proxy-chip.active-filter::after,
+  .tag-chip.active-filter::after{ display: none !important; }
+}
+
+/* ── 5. PRIMARY BUTTONS — press-down on click ──────────────────
+   Tactile feedback. Applies to the top-tier action buttons, so
+   it doesn't fire on every random clickable element. */
+.btn-refresh,
+.btn-transition,
+.btn-mark-sold,
+.btn-archive,
+.btn-banned,
+.btn-membership,
+.jr-dm-save,
+.jr-dm-cancel,
+.btn-add-account{
+  transition: transform .12s cubic-bezier(.2,.8,.4,1.2),
+              background .15s ease,
+              border-color .15s ease,
+              box-shadow .15s ease;
+}
+.btn-refresh:active,
+.btn-transition:active,
+.btn-mark-sold:active,
+.btn-archive:active,
+.btn-banned:active,
+.btn-membership:active,
+.jr-dm-save:active,
+.jr-dm-cancel:active,
+.btn-add-account:active{
+  transform: scale(.96);
+  transition-duration: .05s;
+}
+
+/* Money grid — now lives at the bottom, with a subtle divider above
+   to separate it from the source/timeline rows. */
+.jr-hc-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+  padding: 10px 0 0;
+  margin-top: 8px;
+  border-top: 1px solid var(--jr-divider);
+}
+.jr-hc-stat{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.jr-hc-k{
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: .2em;
+  color: var(--jr-text-3);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.jr-hc-v{
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--jr-text);
+  font-variant-numeric: tabular-nums lining-nums;
+  margin-top: 1px;
+  line-height: 1.1;
+}
+.jr-hc-rows{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--jr-divider);
+  font-size: 11.5px;
+}
+.jr-hc-rows.jr-hc-rows-dim{
+  font-size: 11px;
+  color: var(--jr-text-3);
+}
+.jr-hc-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.jr-hc-row > span:first-child{
+  color: var(--jr-text-3);
+  letter-spacing: .02em;
+  flex-shrink: 0;
+}
+.jr-hc-row > span:last-child{
+  color: var(--jr-text);
+  font-weight: 500;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.jr-hc-row .jr-hc-dim{
+  color: var(--jr-text-3);
+  font-weight: 400;
+  font-size: 10.5px;
+}
+.jr-hc-mono{
+  font-family: 'Inter', monospace;
+  font-size: 10.5px !important;
+}
+.jr-hc-strike{
+  text-decoration: line-through;
+  color: var(--jr-text-3);
+  font-size: 10.5px;
+  margin-right: 4px;
+}
+
+/* Custom scrollbar inside hover card if it overflows */
+#jr-hover-card::-webkit-scrollbar{ width: 6px }
+#jr-hover-card::-webkit-scrollbar-track{ background: transparent }
+#jr-hover-card::-webkit-scrollbar-thumb{
+  background: rgba(200,151,42,.3);
+  border-radius: 3px;
+}
+
+/* ──────────────────────────────────────────────────────────
+   4. GOAL PROGRESS RING
+   ────────────────────────────────────────────────────────── */
+.jr-goal-ring{
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 12px rgba(200,151,42,.25));
+  position: relative;
+}
+.jr-goal-ring svg{
+  display: block;
+}
+.jr-goal-ring text{
+  font-feature-settings: 'tnum' 1;
+}
+[data-jr-theme="light"] .jr-goal-ring text{
+  fill: var(--jr-gold-400) !important;
+}
+
+/* ──────────────────────────────────────────────────────────
+   5. ONBOARDING OVERLAY
+   ────────────────────────────────────────────────────────── */
+#jr-onboard{
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: radial-gradient(ellipse at center, rgba(10,8,5,.85) 0%, rgba(0,0,0,.95) 80%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+[data-jr-theme="light"] #jr-onboard{
+  background: radial-gradient(ellipse at center, rgba(244,236,216,.85) 0%, rgba(108,78,26,.4) 80%);
+}
+#jr-onboard.show{ opacity: 1; }
+.jr-onb-card{
+  position: relative;
+  max-width: 540px;
+  width: 100%;
+  padding: 36px 36px 28px;
+  background: var(--jr-card-bg);
+  border: 1px solid var(--jr-border-strong);
+  border-radius: 18px;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.6),
+    0 0 0 1px rgba(200,151,42,.3),
+    0 0 80px rgba(200,151,42,.1),
+    0 1px 0 rgba(255,220,140,.1) inset;
+  text-align: center;
+  transform: scale(.96);
+  transition: transform .4s cubic-bezier(.2,.8,.2,1);
+}
+#jr-onboard.show .jr-onb-card{ transform: scale(1); }
+.jr-onb-card::before{
+  content:'';
+  position: absolute; top: 0; left: 16px; right: 16px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(78,195,255,.6), transparent);
+}
+.jr-onb-close{
+  position: absolute; top: 14px; right: 16px;
+  background: transparent; border: 0;
+  color: var(--jr-text-3);
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  font-size: 22px; line-height: 1;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.jr-onb-close:hover{ background: rgba(200,151,42,.15); color: var(--jr-gold-200); }
+
+.jr-onb-avatar{
+  width: 92px; height: 92px;
+  margin: 0 auto 16px;
+  background-image: url('assets/4jiraiya-pfp.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2px var(--jr-gold-300),
+    0 0 0 4px var(--jr-bg-2),
+    0 0 36px rgba(200,151,42,.45),
+    0 0 60px rgba(78,195,255,.2);
+  position: relative;
+}
+.jr-onb-avatar::after{
+  content:'';
+  position: absolute;
+  top: -8px; left: 50%;
+  width: 70px; height: 14px;
+  transform: translateX(-50%);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 70 14'><ellipse cx='35' cy='7' rx='30' ry='4' fill='none' stroke='%234ec3ff' stroke-width='1.5'/><ellipse cx='35' cy='7' rx='20' ry='2.4' fill='none' stroke='%23ffffff' stroke-width='.8' opacity='.7'/></svg>");
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 0 6px rgba(78,195,255,.7));
+  animation: jrHaloPulse 3s ease-in-out infinite;
+}
+
+.jr-onb-eyebrow{
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: .35em;
+  color: var(--jr-gold-200);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+[data-jr-theme="light"] .jr-onb-eyebrow{ color: var(--jr-gold-400); }
+.jr-onb-title{
+  font-family: 'Cormorant Garamond', 'Cinzel', serif;
+  font-style: italic;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--jr-text);
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+.jr-onb-sub{
+  color: var(--jr-text-2);
+  font-size: 14px;
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+.jr-onb-steps{
+  text-align: left;
+  display: flex; flex-direction: column; gap: 14px;
+  margin: 22px 0 24px;
+  padding: 18px 20px;
+  background: rgba(0,0,0,.18);
+  border: 1px solid var(--jr-divider);
+  border-radius: 10px;
+}
+[data-jr-theme="light"] .jr-onb-steps{
+  background: rgba(255,255,255,.4);
+}
+.jr-onb-step{
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.jr-onb-num{
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: .1em;
+  color: var(--jr-gold-200);
+  font-weight: 600;
+  width: 28px; height: 28px;
+  border: 1px solid var(--jr-border-strong);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, rgba(200,151,42,.1), transparent);
+}
+[data-jr-theme="light"] .jr-onb-num{ color: var(--jr-gold-400); }
+.jr-onb-h{
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: .14em;
+  color: var(--jr-text);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.jr-onb-t{
+  font-size: 13px;
+  color: var(--jr-text-2);
+  line-height: 1.45;
+}
+.jr-onb-t b{ color: var(--jr-text); }
+.jr-onb-t kbd{
+  display: inline-block;
+  font-family: 'Inter', monospace;
+  font-size: 11px;
+  background: var(--jr-surface-3);
+  color: var(--jr-gold-100);
+  border: 1px solid var(--jr-border-strong);
+  padding: 1px 6px;
+  border-radius: 4px;
+  box-shadow: 0 1px 0 rgba(0,0,0,.4);
+}
+[data-jr-theme="light"] .jr-onb-t kbd{ color: var(--jr-gold-400); }
+
+.jr-onb-actions{
+  display: flex; gap: 10px; justify-content: center;
+  margin-top: 4px;
+}
+.jr-onb-skip,
+.jr-onb-go{
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  border-radius: 10px;
+  padding: 11px 22px;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.jr-onb-skip{
+  background: transparent;
+  color: var(--jr-text-2);
+  border: 1px solid var(--jr-border-strong);
+}
+.jr-onb-skip:hover{
+  border-color: var(--jr-text);
+  color: var(--jr-text);
+}
+.jr-onb-go{
+  background: var(--jr-gold-shine);
+  color: #1a1208;
+  border: 1px solid var(--jr-gold-300);
+  font-weight: 600;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.4) inset,
+    0 -1px 0 rgba(0,0,0,.25) inset,
+    0 6px 20px rgba(200,151,42,.4);
+}
+.jr-onb-go:hover{
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.5) inset,
+    0 -1px 0 rgba(0,0,0,.25) inset,
+    0 8px 26px rgba(200,151,42,.55),
+    0 0 0 1px var(--jr-gold-200);
+}
+
+/* Make goal-featured layout work with the ring */
+.goal-featured{
+  align-items: center !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   POST-BUILD FIXES (May 2026)
+   1. Sold stat-value rendering as solid block — restore digit
+   2. Inventory letter color-coding in dashboard digest
+   3. Workflow columns: stay 5-up at all reasonable widths,
+      then go to 1 column for phone-narrow, never 2/3-col
+   4. Account card buttons (Start Building / List / Mark Sold):
+      always visible, never overflow off the right edge
+   5. Account card hover preview — show key stats while hovered
+      on a collapsed card without needing to expand it
+   ════════════════════════════════════════════════════════════ */
+
+/* ── 1. SOLD STAT VALUE — kill gradient text on .green so the
+   number renders normally instead of as a solid green block.
+   Same treatment for .red so it stays consistent. ───────── */
+.stat-value.green,
+.stat-value[style*="3dba6e"]{
+  background: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  -webkit-text-fill-color: var(--jr-green) !important;
+  color: var(--jr-green) !important;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,.35));
+}
+[data-jr-theme="light"] .stat-value.green,
+[data-jr-theme="light"] .stat-value[style*="3dba6e"]{
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.7));
+}
+.stat-value.red{
+  background: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  -webkit-text-fill-color: var(--jr-red) !important;
+  color: var(--jr-red) !important;
+}
+
+/* ── 2. INVENTORY LETTER COLORS in the daily-digest banner.
+   I = Inventory (blue), B = Building (orange), L = Listed (purple).
+   Matches the same palette used on workflow column borders and
+   account-card status tints, so it reads as a unified system. ─ */
+.jr-digest-v .jr-inv-I{ color:#7ab2db; font-weight:600 }
+.jr-digest-v .jr-inv-B{ color:#e89a5a; font-weight:600 }
+.jr-digest-v .jr-inv-L{ color:#c09bd8; font-weight:600 }
+[data-jr-theme="light"] .jr-digest-v .jr-inv-I{ color:#3a78a8 }
+[data-jr-theme="light"] .jr-digest-v .jr-inv-B{ color:#b85f1a }
+[data-jr-theme="light"] .jr-digest-v .jr-inv-L{ color:#7c4ea8 }
+
+/* ── 3. WORKFLOW COLUMNS — keep all 5 columns side-by-side
+   regardless of window width (down to ~640px). Below that
+   single-phone width, fall straight to 1 column. No more
+   shuffling Sold/Banned to a second row at mid widths. ──── */
+@media (max-width: 1400px){
+  .workflow-columns{ grid-template-columns: repeat(5, 1fr) !important; gap: 8px !important }
+}
+@media (max-width: 1100px){
+  .workflow-columns{ grid-template-columns: repeat(5, 1fr) !important; gap: 6px !important }
+  /* tighten interior padding on cards so they fit narrower columns */
+  .workflow-columns .ac-compact{ padding: 10px 10px !important }
+  .workflow-columns .account-card .ac-summary{ padding: 12px 12px !important }
+}
+@media (max-width: 1000px){
+  .workflow-columns{ grid-template-columns: repeat(5, 1fr) !important }
+}
+@media (max-width: 640px){
+  .workflow-columns{ grid-template-columns: 1fr !important; gap: 12px !important }
+  .workflow-columns .ac-compact{ padding: 12px 14px !important }
+  .workflow-columns .account-card .ac-summary{ padding: 14px 16px !important }
+}
+
+/* ── 4. CARD TOPBAR — keep all controls on a single row,
+   with badges hard-left and the transition button hard-right.
+   No wrapping (which causes the squeezed/cramped state) and
+   no dropping the button to a second row (which causes the
+   button to disappear off-screen at certain widths). The
+   button stays pinned right via margin-left:auto regardless
+   of column width. The card itself horizontally scrolls only
+   if absolutely necessary, but in practice min-content sizing
+   on the badges + name keeps everything inside. ──────────── */
+.workflow-columns .account-card .ac-topbar,
+.workflow-columns .account-card .ac-compact .ac-topbar{
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+}
+/* Hard-pin the transition button to the right edge.
+   margin-left:auto consumes whatever space is left between
+   the last badge and the button. */
+.workflow-columns .account-card .ac-topbar .btn-transition,
+.workflow-columns .account-card .ac-topbar .btn-mark-sold{
+  margin-left: auto !important;
+  flex-shrink: 0 !important;
+  margin-top: 0 !important;
+  white-space: nowrap !important;
+}
+/* The spacer span the original markup adds is no longer needed —
+   margin-left:auto on the button does the same job and won't
+   collapse the way an empty flex spacer can. */
+.workflow-columns .account-card .ac-topbar .ac-topbar-spacer{
+  display: none !important;
+}
+/* Status + type badges shouldn't shrink — the name (next row)
+   absorbs space pressure instead. */
+.workflow-columns .account-card .ac-topbar .status-badge,
+.workflow-columns .account-card .ac-topbar .type-badge{
+  flex-shrink: 0 !important;
+}
+
+/* ── ICON-ONLY TRANSITION BUTTONS in workflow view ─────────
+   Show just the emoji icon — the full action label is hidden
+   in workflow columns and replaced by a custom tooltip below.
+   The button is wide enough to be tappable but tiny enough to
+   never get clipped, even in 5-narrow-column layouts. ────── */
+.jr-icon-btn{
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative;
+}
+.jr-icon-btn .jr-ic{
+  font-size: 13px;
+  line-height: 1;
+}
+/* In workflow view: hide the label, show only icon, square shape */
+.workflow-columns .jr-icon-btn{
+  width: 28px !important;
+  min-width: 28px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  font-size: 12px !important;
+}
+.workflow-columns .jr-icon-btn .jr-lbl{
+  display: none !important;
+}
+.workflow-columns .jr-icon-btn .jr-ic{
+  font-size: 14px;
+}
+/* Outside workflow view (portfolio cards, etc.): keep the
+   full label inline, hide the icon-only sizing. */
+.portfolio-grid .jr-icon-btn,
+:not(.workflow-columns) > .account-card .jr-icon-btn{
+  width: auto;
+  min-width: 0;
+  height: auto;
+}
+
+/* ── CUSTOM TOOLTIP for the icon buttons. Replaces the slow
+   native browser tooltip with an instant themed one. Built
+   purely with CSS via ::after on the button. ──────────────── */
+.workflow-columns .jr-icon-btn::after{
+  content: attr(title);
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
+  padding: 6px 10px;
+  background: var(--jr-surface-2, #1d1812);
+  color: var(--jr-gold-100, #f6dc8a);
+  border: 1px solid var(--jr-border-strong, rgba(200,151,42,.35));
+  border-radius: 5px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity .15s ease, transform .15s ease;
+  box-shadow: 0 6px 18px rgba(0,0,0,.5), 0 0 0 1px rgba(200,151,42,.1);
+  z-index: 100;
+}
+.workflow-columns .jr-icon-btn:hover::after,
+.workflow-columns .jr-icon-btn:focus-visible::after{
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Suppress the native browser tooltip so it doesn't double up */
+.workflow-columns .jr-icon-btn{ /* ensure positioning context */ }
+[data-jr-theme="light"] .workflow-columns .jr-icon-btn::after{
+  background: #fff8e8;
+  color: #6b4d12;
+  box-shadow: 0 6px 18px rgba(108,78,26,.18), 0 0 0 1px rgba(200,151,42,.2);
+}
+
+/* Slight shrink on card name and badges in narrow workflow columns
+   so they don't crowd the transition button when 5 columns are tight. */
+@media (max-width: 1300px){
+  .workflow-columns .ac-compact .ac-name{ font-size: 14px !important }
+  .workflow-columns .ac-compact .status-badge,
+  .workflow-columns .ac-compact .type-badge{ font-size: 9px !important; padding: 2px 6px !important }
+  .workflow-columns .ac-compact-invested,
+  .workflow-columns .ac-compact-meta,
+  .workflow-columns .ac-compact-proxy{ font-size: 11px !important }
+}
+
+/* Densify compact cards in the workflow view by default — saves
+   vertical space so 24+ inventory items don't require so much
+   scrolling. The hover preview surfaces details without expansion,
+   so the compact view itself can be much tighter. */
+.workflow-columns .ac-compact{
+  padding: 9px 11px !important;
+  gap: 6px !important;
+}
+.workflow-columns .ac-compact .ac-topbar{
+  margin-bottom: 4px !important;
+}
+.workflow-columns .ac-compact .ac-header{
+  margin-bottom: 2px !important;
+}
+.workflow-columns .ac-compact-tags{
+  margin-bottom: 3px !important;
+  gap: 3px !important;
+}
+.workflow-columns .ac-compact-tags .ac-tag-pill{
+  font-size: 9.5px !important;
+  padding: 1px 5px !important;
+}
+.workflow-columns .ac-compact-invested,
+.workflow-columns .ac-compact-meta,
+.workflow-columns .ac-compact-proxy{
+  margin-top: 2px !important;
+  margin-bottom: 0 !important;
+}
+.workflow-columns .ac-compact .ac-money-row{
+  margin-top: 3px !important;
+}
+.workflow-columns .ac-compact .ac-price{
+  font-size: 17px !important;
+}
+/* Tighter spacing between cards in a column */
+.workflow-columns .workflow-column{
+  gap: 6px !important;
+}
+/* Add a soft "click to expand" hint via CSS on the card itself */
+.workflow-columns .account-card:not(.expanded):not(.fully-expanded){
+  cursor: pointer;
+}
+
+/* Hide the "Show full stats" button in workflow view — the hover
+   preview now surfaces all the stats inline, so this redundant
+   bottom-of-card toggle just adds clutter. Still visible in
+   portfolio grid view if accessed via expand-card-on-click. */
+.workflow-columns .ac-show-stats-btn{
+  display: none !important;
+}
+
+/* ── 5. ACCOUNT CARD HOVER PREVIEW — enhancements to the
+   existing #jr-hover-card system. The base styling lives
+   above. ──────────────────────────────────────────────────── */
+#jr-hover-card{
+  /* Inherit existing styles. Ensure visibility is controlled
+     purely by inline display set by JS — no CSS rules below
+     should override it. */
+  transition: opacity .12s ease;
+}
+/* When JS sets style="display:block" the card becomes visible.
+   Just to make absolutely sure no other rule snipes it: */
+#jr-hover-card[style*="display: block"],
+#jr-hover-card[style*="display:block"]{
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+/* On touch screens, kill the preview entirely — would otherwise
+   stick after a tap and block click-to-expand. */
+@media (hover: none) and (pointer: coarse){
+  #jr-hover-card{ display: none !important }
+}
+
+/* ════════════════════════════════════════════════════════════
+   PENDING PAYOUT — slim icon-only pill + watermark overlay
+   The full "⏳ PENDING" pill was crowding out the +$net-profit
+   tag on Sold cards. Now it's just the hourglass; the diagonal
+   watermark across the whole card carries the actual message.
+   The watermark layer uses pointer-events:none so all card
+   interactions (click to expand, button clicks, hover preview)
+   continue to work normally.
+   ════════════════════════════════════════════════════════════ */
+.pending-pill.jr-pending-icon{
+  font-size: 14px;
+  padding: 2px 7px;
+  line-height: 1;
+  background: rgba(224,160,72,.18);
+  border: 1px solid rgba(224,160,72,.45);
+  color: #e0a048;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 22px;
+  margin-left: 0;
+  flex-shrink: 0;
+  position: relative;
+  cursor: help;
+  /* slow pulse so it draws the eye even though it's small */
+  animation: jrPendingPulse 2.4s ease-in-out infinite;
+}
+@keyframes jrPendingPulse{
+  0%, 100% { box-shadow: 0 0 0 0 rgba(224,160,72,.0); }
+  50%      { box-shadow: 0 0 8px 1px rgba(224,160,72,.4); }
+}
+/* Custom themed tooltip on the icon (replaces native browser tooltip
+   for snappier feedback). */
+.pending-pill.jr-pending-icon::after{
+  content: 'Pending Payout';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 4px);
+  margin-top: 4px;
+  padding: 6px 10px;
+  background: var(--jr-surface-2, #1d1812);
+  color: #ffd28a;
+  border: 1px solid rgba(224,160,72,.45);
+  border-radius: 5px;
+  font-family: 'Cinzel', serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .15s ease, transform .15s ease;
+  box-shadow: 0 6px 18px rgba(0,0,0,.5);
+  z-index: 100;
+}
+.pending-pill.jr-pending-icon:hover::after,
+.pending-pill.jr-pending-icon:focus-visible::after{
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Card watermark overlay — fills the card with diagonal repeating
+   "PENDING PAYMENT" text. Layered above the card content but with
+   pointer-events:none so clicks pass straight through. The card
+   already has position:relative for the existing border styles, so
+   ::after sits within it. */
+.account-card[data-payout="Pending"]{
+  /* Ensure positioning context for the ::after layer.
+     Note: NOT setting overflow:hidden here, because that would clip
+     the icon-button tooltips that escape the card bottom edge. The
+     ::after layer is already constrained by inset:0. */
+  position: relative;
+}
+.account-card[data-payout="Pending"]::after{
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  /* Border-radius matches card so watermark stays inside rounded corners */
+  border-radius: inherit;
+  overflow: hidden;
+  /* SVG data URI: 250x80 tile with "PENDING PAYMENT" text, rotated
+     -22° via the SVG transform so it tiles cleanly into a diagonal
+     pattern. Color is amber matching the pending palette, with low
+     opacity so card content stays readable. */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='250' height='80' viewBox='0 0 250 80'><g transform='rotate(-22 125 40)'><text x='125' y='48' text-anchor='middle' font-family='Cinzel, Georgia, serif' font-size='18' font-weight='700' letter-spacing='4' fill='%23e0a048' fill-opacity='0.13'>PENDING PAYMENT</text></g></svg>");
+  background-repeat: repeat;
+  background-size: 250px 80px;
+  /* Mix-blend-mode lifts the watermark on dark backgrounds without
+     overpowering on light ones */
+  mix-blend-mode: screen;
+}
+/* Light theme — switch to a darker amber that reads on parchment */
+[data-jr-theme="light"] .account-card[data-payout="Pending"]::after{
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='250' height='80' viewBox='0 0 250 80'><g transform='rotate(-22 125 40)'><text x='125' y='48' text-anchor='middle' font-family='Cinzel, Georgia, serif' font-size='18' font-weight='700' letter-spacing='4' fill='%23a86a1e' fill-opacity='0.18'>PENDING PAYMENT</text></g></svg>");
+  mix-blend-mode: multiply;
+}
+/* Make sure the ::after layer doesn't sit above interactive children
+   like the modal/hover preview which use higher z-index. */
+.account-card[data-payout="Pending"] > *{
+  position: relative;
+  z-index: 6;
+}
+
+/* ════════════════════════════════════════════════════════════
+   AUTO-TAG PILLS — skill-driven tags computed from hiscores
+   (e.g., MLM ready when mining ≥ 31). Visually similar to
+   manual tags but with a subtle gold accent + tiny "auto"
+   indicator dot, so it's clear which ones are computed.
+   ════════════════════════════════════════════════════════════ */
+.ac-tag-pill.jr-auto-tag{
+  background: linear-gradient(180deg, rgba(200,151,42,.16), rgba(200,151,42,.08)) !important;
+  border-color: rgba(200,151,42,.45) !important;
+  color: var(--gold-lt, #f6dc8a) !important;
+  position: relative;
+  padding-left: 14px !important;
+}
+/* Tiny dot at the leading edge to mark it as auto-computed */
+.ac-tag-pill.jr-auto-tag::before{
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--gold, #c8972a);
+  box-shadow: 0 0 4px rgba(200,151,42,.6);
+}
+.ac-tag-pill.jr-auto-tag:hover{
+  /* Override the default hover that suggests removability — auto-tags
+     can't be removed (they regenerate on next hiscores load). */
+  background: linear-gradient(180deg, rgba(200,151,42,.22), rgba(200,151,42,.12)) !important;
+  border-color: rgba(200,151,42,.6) !important;
+  color: var(--gold-lt, #f6dc8a) !important;
+  cursor: help !important;
+}
+.ac-tag-pill.jr-auto-tag:hover::after{
+  content: '' !important;
+}
+.jr-auto-tag-ic{
+  font-size: 10px;
+  margin-right: 1px;
+}
+[data-jr-theme="light"] .ac-tag-pill.jr-auto-tag{
+  color: #6b4d12 !important;
+  background: linear-gradient(180deg, rgba(200,151,42,.22), rgba(200,151,42,.10)) !important;
+  border-color: rgba(180,130,30,.5) !important;
+}
+
+/* ── 99-TIER AUTO-TAGS ─────────────────────────────────────
+   One pill per skill the account has at level 99. Bigger,
+   glowing, with the official OSRS skill icon + "99". This is
+   the trophy tier — visually distinct from standard auto-tags. */
+.ac-tag-pill.jr-auto-tag.jr-auto-tag-99{
+  /* Override the standard auto-tag styling for the 99 tier */
+  padding: 3px 9px 3px 7px !important;
+  background: linear-gradient(180deg, rgba(255,210,90,.32), rgba(200,151,42,.20)) !important;
+  border: 1.5px solid rgba(255,210,90,.65) !important;
+  color: #ffe8a0 !important;
+  font-weight: 800 !important;
+  font-size: 11px !important;
+  letter-spacing: .04em !important;
+  border-radius: 12px !important;
+  box-shadow:
+    0 0 12px rgba(255,210,90,.45),
+    0 0 0 1px rgba(255,210,90,.18) inset,
+    0 1px 0 rgba(255,255,255,.12) inset !important;
+  text-shadow: 0 0 6px rgba(255,210,90,.55);
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px;
+  position: relative;
+  overflow: hidden; /* keep the shimmer animation contained */
+  /* slow gold pulse so the trophy row catches the eye */
+  animation: jr99Pulse 2.8s ease-in-out infinite;
+}
+/* Remove the standard gold-dot leading marker for 99 tier */
+.ac-tag-pill.jr-auto-tag.jr-auto-tag-99::before{
+  display: none !important;
+}
+/* Shimmer sweep across the pill — a subtle moving highlight */
+.ac-tag-pill.jr-auto-tag.jr-auto-tag-99::after{
+  content: '' !important;
+  position: absolute;
+  top: 0; bottom: 0;
+  left: -50%;
+  width: 50%;
+  background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,.18) 50%, transparent 100%);
+  animation: jr99Shimmer 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes jr99Pulse{
+  0%, 100% { box-shadow: 0 0 12px rgba(255,210,90,.45), 0 0 0 1px rgba(255,210,90,.18) inset, 0 1px 0 rgba(255,255,255,.12) inset; }
+  50%      { box-shadow: 0 0 18px rgba(255,210,90,.7),  0 0 0 1px rgba(255,210,90,.30) inset, 0 1px 0 rgba(255,255,255,.18) inset; }
+}
+@keyframes jr99Shimmer{
+  0%   { left: -60%; opacity: 0; }
+  35%  { opacity: .9; }
+  70%  { left: 110%; opacity: 0; }
+  100% { left: 110%; opacity: 0; }
+}
+.ac-tag-pill.jr-auto-tag.jr-auto-tag-99:hover{
+  background: linear-gradient(180deg, rgba(255,210,90,.42), rgba(200,151,42,.26)) !important;
+  border-color: rgba(255,210,90,.85) !important;
+  color: #fff4c0 !important;
+}
+.jr-auto-tag-skill-ic{
+  width: 14px !important;
+  height: 14px !important;
+  object-fit: contain;
+  filter: drop-shadow(0 0 3px rgba(255,210,90,.6));
+}
+.jr-auto-tag-99-num{
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+[data-jr-theme="light"] .ac-tag-pill.jr-auto-tag.jr-auto-tag-99{
+  color: #8b5e0a !important;
+  background: linear-gradient(180deg, #fff0b8, #f0c558) !important;
+  border-color: rgba(180,130,30,.7) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.55);
+  box-shadow:
+    0 0 10px rgba(255,210,90,.55),
+    0 1px 0 rgba(255,255,255,.6) inset !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   STATS MODAL — opens on 📊 button click
+   Centered modal showing the OSRS hiscores grid for an account.
+   Skills are clickable to pin them as gold highlights on the
+   parent card. Mirrors the inline expander it replaces, but
+   surfaces the data on demand instead of taking up card height.
+   ════════════════════════════════════════════════════════════ */
+
+/* The 📊 stats button is now hidden — the hover preview shows the
+   full skills tab inline so the modal is no longer needed. The button
+   markup and modal code are kept for forward-compat but never appear. */
+.jr-stats-btn{
+  display: none !important;
+}
+.jr-row-with-stats.jr-row-stats-only{
+  display: none !important;
+}
+/* Restore plain row behavior (no stats spacer/button consuming space) */
+.jr-row-with-stats{
+  display: contents;
+}
+
+/* Disable click-to-pin in the workflow cards' skill grid, since pinning
+   is no longer used. Keeps the skill grid visible if expanded but it
+   doesn't react to clicks. */
+.workflow-columns .skill-cell{
+  pointer-events: none !important;
+  cursor: default !important;
+}
+.workflow-columns .skill-cell[title]{
+  /* drop the "Click to pin" hint */
+}
+
+/* Wrapper row that holds an existing status line + the stats button.
+   Existing content sits left, jr-row-stats-spacer pushes the button
+   to the right edge. Behaves like a single-line row so it doesn't
+   add visual height vs the original line it's wrapping. */
+.jr-row-with-stats{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+.jr-row-with-stats > *:first-child{
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.jr-row-stats-spacer{
+  flex: 1 1 auto;
+  min-width: 0;
+}
+/* When the row only contains the button (no anchor content), right-align it */
+.jr-row-with-stats.jr-row-stats-only{
+  justify-content: flex-end;
+}
+/* The .ac-sold-line gets the same right-align treatment via the inline
+   spacer span placed before the button. No extra rule needed here. */
+.jr-stats-btn:hover{
+  background: rgba(200,151,42,.18) !important;
+  border-color: var(--jr-gold-300, #d6a02d) !important;
+  transform: translateY(-1px);
+}
+.jr-stats-btn .jr-ic{ font-size: 12px; line-height: 1; }
+.jr-stats-btn .jr-lbl{ display: none; }
+/* Custom tooltip for the stats button (matches the transition button style) */
+.jr-stats-btn::after{
+  content: attr(title);
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
+  padding: 6px 10px;
+  background: var(--jr-surface-2, #1d1812);
+  color: var(--jr-gold-100, #f6dc8a);
+  border: 1px solid var(--jr-border-strong, rgba(200,151,42,.35));
+  border-radius: 5px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity .15s ease, transform .15s ease;
+  box-shadow: 0 6px 18px rgba(0,0,0,.5), 0 0 0 1px rgba(200,151,42,.1);
+  z-index: 100;
+}
+.jr-stats-btn:hover::after,
+.jr-stats-btn:focus-visible::after{
+  opacity: 1;
+  transform: translateY(0);
+}
+[data-jr-theme="light"] .jr-stats-btn::after{
+  background: #fff8e8;
+  color: #6b4d12;
+  box-shadow: 0 6px 18px rgba(108,78,26,.18), 0 0 0 1px rgba(200,151,42,.2);
+}
+
+/* Modal overlay — full-screen dim with blur, hidden until .show */
+#jr-stats-modal{
+  position: fixed;
+  inset: 0;
+  z-index: 9700;
+  background: rgba(5,5,5,.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10vh;
+  animation: jrSmFade .25s ease;
+}
+#jr-stats-modal.show{ display: flex; }
+@keyframes jrSmFade{ from{opacity:0} to{opacity:1} }
+
+/* Modal card */
+.jr-sm-card{
+  width: min(640px, 94vw);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #1a140d 0%, #0e0b07 100%);
+  border: 1px solid rgba(200,151,42,.4);
+  border-radius: 14px;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.7),
+    0 0 0 1px rgba(200,151,42,.15),
+    0 0 60px rgba(200,151,42,.15);
+  overflow: hidden;
+  animation: jrSmIn .35s cubic-bezier(.2,.8,.2,1);
+}
+[data-jr-theme="light"] .jr-sm-card{
+  background: linear-gradient(180deg, #fcf3dc 0%, #f4e6c2 100%);
+  box-shadow:
+    0 24px 60px rgba(108,78,26,.25),
+    0 0 0 1px rgba(200,151,42,.3);
+}
+@keyframes jrSmIn{
+  from{ opacity: 0; transform: translateY(-12px) scale(.96); }
+  to  { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Modal header */
+.jr-sm-head{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid rgba(200,151,42,.18);
+}
+.jr-sm-head-l{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+.jr-sm-name{
+  font-family: 'Cinzel', serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--jr-gold-100, #f6dc8a);
+  background: var(--jr-gold-shine, linear-gradient(180deg,#fff0b8,#c8972a));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+[data-jr-theme="light"] .jr-sm-name{
+  -webkit-text-fill-color: #6b4d12;
+  background: none;
+}
+.jr-sm-sub{
+  font-size: 11px;
+  color: var(--jr-text-3, #75705f);
+  letter-spacing: .04em;
+}
+.jr-sm-close{
+  width: 32px; height: 32px;
+  flex-shrink: 0;
+  border: 1px solid rgba(200,151,42,.3);
+  background: rgba(200,151,42,.06);
+  color: var(--jr-text-2, #b4ad9e);
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.jr-sm-close:hover{
+  background: rgba(214,83,74,.12);
+  border-color: rgba(214,83,74,.4);
+  color: #d6534a;
+}
+
+/* Top stat strip — Total Lvl · Combat · Total XP */
+.jr-sm-summary{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  padding: 16px 20px;
+  border-bottom: 1px dashed rgba(200,151,42,.15);
+  background: linear-gradient(135deg, rgba(200,151,42,.05) 0%, transparent 60%);
+}
+.jr-sm-stat{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-right: 1px solid rgba(200,151,42,.12);
+}
+.jr-sm-stat:last-child{ border-right: 0; }
+.jr-sm-stat-v{
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--jr-gold-100, #f6dc8a);
+  line-height: 1;
+  font-variant-numeric: tabular-nums lining-nums;
+  background: var(--jr-gold-shine, linear-gradient(180deg,#fff0b8,#c8972a));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+[data-jr-theme="light"] .jr-sm-stat-v{
+  -webkit-text-fill-color: #6b4d12;
+  background: none;
+}
+.jr-sm-stat-k{
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--jr-text-3, #75705f);
+  margin-top: 6px;
+  font-weight: 600;
+}
+.jr-sm-loading,
+.jr-sm-error,
+.jr-sm-empty{
+  padding: 30px 20px;
+  text-align: center;
+  color: var(--jr-text-3, #75705f);
+  font-size: 13px;
+  font-style: italic;
+}
+.jr-sm-error{ color: #d6534a; font-style: normal; }
+
+/* Skills grid */
+.jr-sm-grid{
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px 20px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+@media (max-width: 600px){
+  .jr-sm-grid{ grid-template-columns: repeat(4, 1fr); }
+}
+/* The .skill-cell rule already exists in the host page, so the cells
+   inside our modal will inherit it. Just give them a touch more padding. */
+.jr-sm-grid .skill-cell{
+  padding: 8px 4px !important;
+  transition: transform .12s ease, background .15s ease, border-color .15s ease;
+}
+.jr-sm-grid .skill-cell:hover{
+  transform: translateY(-1px);
+  background: rgba(200,150,42,.18) !important;
+  border-color: rgba(200,151,42,.5) !important;
+}
+.jr-sm-grid .skill-cell img{
+  width: 20px !important; height: 20px !important;
+  margin-bottom: 3px !important;
+}
+.jr-sm-grid .skill-cell .sk-lvl{
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+.jr-sm-grid .skill-cell .sk-name{
+  font-size: 9px !important;
+  color: var(--jr-text-3, #75705f);
+  letter-spacing: .08em;
+  margin-top: 2px;
+}
+
+/* Modal footer */
+.jr-sm-foot{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 18px;
+  border-top: 1px solid rgba(200,151,42,.15);
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: .15em;
+  color: var(--jr-text-3, #75705f);
+  text-transform: uppercase;
+}
+.jr-sm-foot-tag{ color: rgba(200,151,42,.6); }
+
+/* Hide the stats button on really tiny portfolio cards (it's only meant
+   for workflow view), but the simpler answer is to scope it to ac-header
+   visibility — keep it shown everywhere by default since the button is
+   small. If user finds it intrusive elsewhere we can scope tighter. */
